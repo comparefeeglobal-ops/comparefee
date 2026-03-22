@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompareFee — Compare Crypto Exchange VIP Fees</title>
+  <meta name="description" content="Compare VIP fees across top crypto exchanges and get exclusive cashback rebates" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div class="page-layout">
+    <!-- Left Sidebar Ad -->
+    <aside class="ad-sidebar ad-sidebar--left" id="adSidebarLeft">
+      <div class="ad-sidebar__sticky">
+        <!--
+          사이드 광고 코드 삽입 위치 (160x600 또는 120x600)
+          <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXX" data-ad-slot="AAAAA"></ins>
+        -->
+        <span class="ad-slot__placeholder">AD</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__top">
+          <div class="logo">
+            <span class="logo__icon">📡</span>
+            <span class="logo__text">Compare<span class="logo__accent">Fee</span></span>
+          </div>
+          <select id="langSelect" class="lang-select">
+            <option value="en">🇺🇸 EN</option>
+            <option value="ko">🇰🇷 KO</option>
+            <option value="zh">🇨🇳 ZH</option>
+            <option value="hi">🇮🇳 HI</option>
+            <option value="tr">🇹🇷 TR</option>
+          </select>
+        </div>
+        <p class="header__tagline" data-i18n="tagline">Compare VIP fees across top crypto exchanges</p>
+      </div>
+    </header>
+
+    <!-- Ad Slot: Top (between header and controller) -->
+    <div class="ad-slot" id="adSlotTop">
+      <!-- 
+        광고 코드 삽입 위치 (예: Google AdSense, Coinzilla, Bitmedia)
+        <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXX" data-ad-slot="YYYYY"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span class="ad-slot__placeholder">AD</span>
+    </div>
+
+    <!-- Master Controller -->
+    <section class="controller" id="controller">
+      <div class="controller__inner">
+        <!-- Row 1: Market + Criteria toggles -->
+        <div class="controller__row controller__row--toggles">
+          <div class="toggle-group" id="marketToggle">
+            <label class="toggle-group__label" data-i18n="market">MARKET</label>
+            <div class="toggle-buttons">
+              <button class="toggle-btn toggle-btn--active" data-value="futures" data-i18n="futures">Futures</button>
+              <button class="toggle-btn" data-value="spot" data-i18n="spot">Spot</button>
+            </div>
+          </div>
+          <div class="toggle-group" id="criteriaToggle">
+            <label class="toggle-group__label" data-i18n="vipCriteria">VIP CRITERIA</label>
+            <div class="toggle-buttons">
+              <button class="toggle-btn toggle-btn--active" data-value="volume" data-i18n="volume">30D Volume</button>
+              <button class="toggle-btn" data-value="deposit" data-i18n="deposit">Deposit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Slider + Input -->
+        <div class="controller__row controller__row--slider">
+          <div class="slider-group">
+            <label class="slider-group__label" id="sliderLabel" data-i18n="sliderLabelVolume">30-DAY TRADING VOLUME</label>
+            <div class="slider-container">
+              <div class="slider-ticks" id="sliderTicks"></div>
+              <input type="range" id="valueSlider" class="slider" min="0" max="1000" value="300" />
+              <div class="slider-track-fill" id="sliderFill"></div>
+            </div>
+            <div class="slider-input-wrap">
+              <span class="slider-input-prefix">$</span>
+              <input type="text" id="valueInput" class="slider-input" value="1,000,000" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Option switches -->
+        <div class="controller__row controller__row--switches">
+          <label class="switch-label" id="coinDiscountSwitch">
+            <div class="switch">
+              <input type="checkbox" id="coinDiscountCheck" />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+            </div>
+            <div class="switch-text">
+              <span class="switch-text__title" data-i18n="coinDiscount">✅ Exchange Coin Discount</span>
+              <span class="switch-text__desc" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
+            </div>
+          </label>
+          <label class="switch-label" id="rebateSwitch">
+            <div class="switch">
+              <input type="checkbox" id="rebateCheck" />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+            </div>
+            <div class="switch-text">
+              <span class="switch-text__title" data-i18n="rebate">🎁 CompareFee Exclusive Rebate</span>
+              <span class="switch-text__desc" data-i18n="rebateDesc">Cashback on every trade via referral</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chart Area -->
+    <section class="chart-section" id="chartSection">
+      <div class="chart-section__inner">
+        <div class="chart-container" id="chartContainer">
+          <!-- Y-axis labels -->
+          <div class="chart__y-axis" id="yAxis"></div>
+          <!-- Chart bars rendered here -->
+          <div class="chart__area" id="chartArea">
+            <div class="chart__marker" id="chartMarker">
+              <div class="chart__marker-line"></div>
+              <div class="chart__marker-label" id="markerLabel"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ad Slot: Mid (between chart and result cards) -->
+    <div class="ad-slot" id="adSlotMid">
+      <!--
+        광고 코드 삽입 위치 (예: Google AdSense, Coinzilla, Bitmedia)
+        <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXX" data-ad-slot="ZZZZZ"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span class="ad-slot__placeholder">AD</span>
+    </div>
+
+    <!-- Result Cards -->
+    <section class="results" id="results">
+      <div class="results__inner" id="resultsInner">
+        <!-- Cards generated by JS -->
+      </div>
+    </section>
+
+    <!-- Ad Slot: Bottom (between result cards and disclaimer) -->
+    <div class="ad-slot" id="adSlotBottom">
+      <!--
+        광고 코드 삽입 위치 (예: Google AdSense, Coinzilla, Bitmedia)
+        <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXX" data-ad-slot="WWWWW"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span class="ad-slot__placeholder">AD</span>
+    </div>
+
+    <!-- Disclaimer -->
+    <footer class="disclaimer">
+      <div class="disclaimer__inner">
+        <p data-i18n="disclaimer1">⚠️ Data is updated periodically. Actual fees may differ due to real-time policy changes.</p>
+        <p data-i18n="disclaimer2">Rebate rates and payment methods follow CompareFee policy and each exchange's terms.</p>
+        <p data-i18n="disclaimer3">Some VIP tiers may require additional asset holdings beyond volume/deposit.</p>
+        <p class="disclaimer__update"><span data-i18n="lastUpdated">Last updated</span>: 2026-03-22</p>
+      </div>
+    </footer>
+  </div>
+
+    <!-- Right Sidebar Ad -->
+    <aside class="ad-sidebar ad-sidebar--right" id="adSidebarRight">
+      <div class="ad-sidebar__sticky">
+        <!--
+          사이드 광고 코드 삽입 위치 (160x600 또는 120x600)
+          <ins class="adsbygoogle" data-ad-client="ca-pub-XXXXX" data-ad-slot="BBBBB"></ins>
+        -->
+        <span class="ad-slot__placeholder">AD</span>
+      </div>
+    </aside>
+  </div><!-- /.page-layout -->
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

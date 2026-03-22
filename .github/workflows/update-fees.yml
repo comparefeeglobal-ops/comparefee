@@ -1,0 +1,53 @@
+name: Daily Fee Data Update
+
+on:
+  # Run every day at 2:00 AM UTC (11:00 AM KST)
+  schedule:
+    - cron: '0 2 * * *'
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-fees:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to push updated exchangeData.js
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run fee data collection
+        run: node scripts/collect.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet src/data/exchangeData.js; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in fee data."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Fee data has changed!"
+            git diff --stat src/data/exchangeData.js
+          fi
+
+      - name: Commit and push updated data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "FeeRadar Bot"
+          git config user.email "bot@feeradar.io"
+          git add src/data/exchangeData.js
+          git commit -m "chore: auto-update fee data [$(date -u '+%Y-%m-%d')]"
+          git push
