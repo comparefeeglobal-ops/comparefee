@@ -23,7 +23,31 @@ const state = {
   userValue: 1_000_000, // user's input value
   coinDiscount: false,
   rebateEnabled: false,
+  sortBy: 'taker',      // 'taker' | 'maker' | 'name'
+  activeExchangeIds: exchanges.map(ex => ex.id), 
 };
+
+function saveState() {
+  localStorage.setItem('comparefee_state', JSON.stringify(state));
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('comparefee_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.market) state.market = parsed.market;
+      if (parsed.criteria) state.criteria = parsed.criteria;
+      if (typeof parsed.userValue === 'number') state.userValue = parsed.userValue;
+      if (typeof parsed.coinDiscount === 'boolean') state.coinDiscount = parsed.coinDiscount;
+      if (typeof parsed.rebateEnabled === 'boolean') state.rebateEnabled = parsed.rebateEnabled;
+      if (parsed.sortBy) state.sortBy = parsed.sortBy;
+      if (parsed.activeExchangeIds && Array.isArray(parsed.activeExchangeIds)) {
+        state.activeExchangeIds = parsed.activeExchangeIds;
+      }
+    }
+  } catch(e) {}
+}
 
 // ============================================
 // DOM References
@@ -45,18 +69,30 @@ const els = {
   resultsInner: document.getElementById('resultsInner'),
   chartContainer: document.getElementById('chartContainer'),
   langSelect: document.getElementById('langSelect'),
+  filterBtn: document.getElementById('filterBtn'),
+  filterBtnText: document.getElementById('filterBtnText'),
+  filterDropdown: document.getElementById('filterDropdown'),
+  selectAllExchanges: document.getElementById('selectAllExchanges'),
+  filterList: document.getElementById('filterList'),
+  applyFilterBtn: document.getElementById('applyFilterBtn'),
+  themeToggle: document.getElementById('themeToggle'),
 };
 
 // ============================================
 // Initialization
 // ============================================
+// ============================================
 function init() {
+  loadState();
+  setupTheme();
   setupToggles();
   setupSlider();
   setupSwitches();
   setupSliderTicks();
   setupYAxis();
   setupLangSelect();
+  setupSortBar();
+  setupFilterDropdown();
   initI18n(() => {
     updateSliderLabel();
     render();
@@ -72,6 +108,7 @@ function setupToggles() {
     if (!btn) return;
     state.market = btn.dataset.value;
     updateToggleUI(els.marketToggle, state.market);
+    saveState();
     render();
   });
 
@@ -81,6 +118,7 @@ function setupToggles() {
     state.criteria = btn.dataset.value;
     updateToggleUI(els.criteriaToggle, state.criteria);
     updateSliderLabel();
+    saveState();
     render();
   });
 }
@@ -94,13 +132,29 @@ function updateToggleUI(container, activeValue) {
 // ============================================
 // Slider Setup
 // ============================================
+let renderRafId = null;
+
 function setupSlider() {
   els.slider.addEventListener('input', () => {
     const position = els.slider.value / 1000;
     state.userValue = sliderToValue(position);
     syncInputFromValue();
     updateSliderFill();
-    render();
+    
+    // 마커 선과 라벨은 가벼우므로 즉시(Instantly) 이동시켜서 Delay, Lag 제거
+    const chartHeight = els.chartArea.offsetHeight || 480;
+    renderMarker(chartHeight);
+
+    // 차트 박스와 계산 등의 무거운 렌더링 작업은 다음 프레임으로 분산 (60fps 보장)
+    if (renderRafId) cancelAnimationFrame(renderRafId);
+    renderRafId = requestAnimationFrame(() => {
+      render();
+    });
+  });
+
+  // 슬라이더 조작이 끝났을 때(마우스/터치 뗐을 때)만 스토리지에 저장 (I/O 병목 방지)
+  els.slider.addEventListener('change', () => {
+    saveState();
   });
 
   els.valueInput.addEventListener('input', (e) => {
@@ -109,6 +163,7 @@ function setupSlider() {
     if (!isNaN(num) && num >= 0) {
       state.userValue = num;
       syncSliderFromValue();
+      saveState();
       render();
     }
   });
@@ -145,6 +200,32 @@ function updateSliderLabel() {
 }
 
 // ============================================
+// Theme Setup
+// ============================================
+function setupTheme() {
+  const toggleBtn = els.themeToggle;
+  if (!toggleBtn) return;
+  const iconSpan = toggleBtn.querySelector('.theme-icon');
+  
+  // Load saved theme, default to 'light'
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'light') {
+    document.body.classList.add('theme-light');
+    if(iconSpan) iconSpan.textContent = '🌙'; // 라이트모드일때 달력 버튼 표시 (다크모드로 가기)
+  } else {
+    document.body.classList.remove('theme-light');
+    if(iconSpan) iconSpan.textContent = '☀️'; // 다크모드일때 해 버튼 표시 (라이트모드로 가기)
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('theme-light');
+    const newTheme = isLight ? 'light' : 'dark';
+    if(iconSpan) iconSpan.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('theme', newTheme);
+  });
+}
+
+// ============================================
 // Language Selector
 // ============================================
 function setupLangSelect() {
@@ -174,13 +255,108 @@ function setupSliderTicks() {
 // Switch Setup
 // ============================================
 function setupSwitches() {
+  els.coinDiscountCheck.checked = state.coinDiscount;
+  els.rebateCheck.checked = state.rebateEnabled;
+
   els.coinDiscountCheck.addEventListener('change', () => {
     state.coinDiscount = els.coinDiscountCheck.checked;
+    saveState();
     render();
   });
 
   els.rebateCheck.addEventListener('change', () => {
     state.rebateEnabled = els.rebateCheck.checked;
+    saveState();
+    render();
+  });
+}
+
+// ============================================
+// Sort Bar
+// ============================================
+function setupSortBar() {
+  const sortBar = document.getElementById('sortBar');
+  if (!sortBar) return;
+  sortBar.addEventListener('click', (e) => {
+    const btn = e.target.closest('.sort-btn');
+    if (!btn) return;
+    state.sortBy = btn.dataset.sort;
+    sortBar.querySelectorAll('.sort-btn').forEach(b =>
+      b.classList.toggle('sort-btn--active', b === btn)
+    );
+    saveState();
+    renderCards(_lastResults);
+  });
+}
+
+// ============================================
+// Filter Dropdown
+// ============================================
+function setupFilterDropdown() {
+  // Populate items
+  const html = exchanges.map(ex => `
+    <div class="filter-item">
+      <label class="filter-checkbox-label">
+        <input type="checkbox" class="exchange-checkbox" value="${ex.id}" checked>
+        <span class="checkbox-custom"></span>
+        ${ex.name}
+      </label>
+    </div>
+  `).join('');
+  els.filterList.innerHTML = html;
+
+  const checkboxes = Array.from(els.filterList.querySelectorAll('.exchange-checkbox'));
+
+  // Initialize checkboxes from state
+  checkboxes.forEach(cb => {
+    cb.checked = state.activeExchangeIds.includes(cb.value);
+  });
+  const allChecked = checkboxes.every(cb => cb.checked);
+  els.selectAllExchanges.checked = allChecked;
+  els.filterBtnText.textContent = `Filter (${state.activeExchangeIds.length}/${exchanges.length})`;
+
+  // Toggle dropdown
+  els.filterBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    els.filterDropdown.classList.toggle('hidden');
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!els.filterDropdown.classList.contains('hidden') && 
+        !els.filterDropdown.contains(e.target) && 
+        !els.filterBtn.contains(e.target)) {
+      els.filterDropdown.classList.add('hidden');
+    }
+  });
+
+  // Stop propagation inside dropdown
+  els.filterDropdown.addEventListener('click', (e) => e.stopPropagation());
+
+  // Select All logic
+  els.selectAllExchanges.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    checkboxes.forEach(cb => cb.checked = isChecked);
+  });
+
+  // Individual checkbox -> Sync Select All
+  els.filterList.addEventListener('change', (e) => {
+    if (e.target.classList.contains('exchange-checkbox')) {
+      const allChecked = checkboxes.every(cb => cb.checked);
+      els.selectAllExchanges.checked = allChecked;
+    }
+  });
+
+  // Apply btn
+  els.applyFilterBtn.addEventListener('click', () => {
+    const selected = checkboxes.filter(cb => cb.checked).map(cb => cb.value);
+    
+    // Fallback: if user unselected everything, auto select all? Or just allow empty state
+    // We allow empty state (will show 0 charts)
+    state.activeExchangeIds = selected;
+    saveState();
+    els.filterBtnText.textContent = `Filter (${selected.length}/${exchanges.length})`;
+    els.filterDropdown.classList.add('hidden');
     render();
   });
 }
@@ -219,9 +395,12 @@ function renderYAxis() {
 // ============================================
 // Main Render
 // ============================================
+let _lastResults = [];
+
 function render() {
   const chartHeight = els.chartArea.offsetHeight || 480;
-  const activeExchanges = exchanges.filter(ex => ex.active);
+  // Filter active and user-selected exchanges
+  const activeExchanges = exchanges.filter(ex => ex.active && state.activeExchangeIds.includes(ex.id));
 
   // Get data for current market + criteria
   const results = activeExchanges.map(ex => {
@@ -258,33 +437,53 @@ function render() {
 
   renderChart(results, chartHeight);
   renderMarker(chartHeight);
+  _lastResults = results;
   renderCards(results);
 }
 
 // ============================================
 // Chart Rendering
 // ============================================
+const COL_WIDTH = 88; // px — must match CSS .exchange-column width
+
 function renderChart(results, chartHeight) {
-  // Reuse existing column nodes — only create them on first render
-  const existingCols = els.chartArea.querySelectorAll('.exchange-column');
-  const needsCreate = existingCols.length !== results.length;
+  // Dynamically set chartArea width so horizontal scroll works
+  const totalWidth = results.length * (COL_WIDTH + 2); // +2 for gap
+  els.chartArea.style.minWidth = totalWidth + 'px';
+  
+  // Make an array of existing columns to easily remove excess
+  const existingCols = Array.from(els.chartArea.querySelectorAll('.exchange-column'));
+
+  // Remove excess columns if there are more DOM nodes than filtered results
+  if (existingCols.length > results.length) {
+    for (let i = results.length; i < existingCols.length; i++) {
+      existingCols[i].remove();
+    }
+  }
 
   results.forEach(({ exchange, disabled, tiers, matchedTierIndex }, colIdx) => {
     let col = existingCols[colIdx];
     let tiersContainer;
 
-    if (needsCreate || !col) {
+    if (!col) {
       col = document.createElement('div');
       col.className = 'exchange-column';
       const label = document.createElement('div');
       label.className = 'exchange-column__label';
-      label.innerHTML = `<span class="exchange-column__name" style="color:${exchange.color}">${exchange.name}</span>`;
+      label.innerHTML = `<span class="exchange-column__name" data-exchange="${exchange.id}" style="color:${exchange.color}">${exchange.name}</span>`;
       col.appendChild(label);
       tiersContainer = document.createElement('div');
       tiersContainer.className = 'exchange-column__tiers';
       col.appendChild(tiersContainer);
       els.chartArea.appendChild(col);
     } else {
+      // Update the label just in case this reused column belonged to a different exchange
+      const labelSpan = col.querySelector('.exchange-column__name');
+      if (labelSpan) {
+        labelSpan.setAttribute('data-exchange', exchange.id);
+        labelSpan.style.color = exchange.color;
+        labelSpan.textContent = exchange.name;
+      }
       tiersContainer = col.querySelector('.exchange-column__tiers');
     }
 
@@ -332,14 +531,28 @@ function renderChart(results, chartHeight) {
 function renderMarker(chartHeight) {
   const y = valueToY(state.userValue, chartHeight);
   els.chartMarker.style.top = y + 'px';
-  els.markerLabel.textContent = formatUSD(state.userValue);
+  // Also update global fixed marker label height
+  if (els.markerLabel) {
+    els.markerLabel.style.top = y + 'px';
+    els.markerLabel.textContent = formatUSD(state.userValue);
+  }
 }
 
 // ============================================
-// Result Cards
+// Result Cards (DOM Pooling Optimized)
 // ============================================
+const _cardPool = new Map();
+
 function renderCards(results) {
   const validResults = results.filter(r => !r.disabled && r.fees);
+
+  // Sort cards
+  const sorted = [...validResults].sort((a, b) => {
+    if (state.sortBy === 'name') {
+      return a.exchange.name.localeCompare(b.exchange.name);
+    }
+    return a.fees[state.sortBy] - b.fees[state.sortBy];
+  });
 
   // Find lowest maker and lowest taker independently
   let lowestMaker = Infinity;
@@ -349,53 +562,95 @@ function renderCards(results) {
     if (r.fees.taker < lowestTaker) lowestTaker = r.fees.taker;
   });
 
-  let html = '';
-  validResults.forEach(r => {
+  sorted.forEach((r, orderIndex) => {
     const { exchange, matchedTier, fees, hasCoinDiscount } = r;
     const isMakerLowest = fees.maker === lowestMaker;
     const isTakerLowest = fees.taker === lowestTaker;
     const showCoinNotice = state.coinDiscount && !hasCoinDiscount;
-
-    // Pre-rebate fees (with coin discount applied if active, but without rebate)
-    // This is what we show as the strikethrough "original" price
-    const preRebateFees = calculateFees(matchedTier, {
-      coinDiscount: state.coinDiscount,
-      rebateRate: 0,
-    });
-
-    // Strikethrough + green highlight only when rebate is ON and actually changes the fee
+    const preRebateFees = calculateFees(matchedTier, { coinDiscount: state.coinDiscount, rebateRate: 0 });
     const rebateMakerChanged = state.rebateEnabled && fees.maker !== preRebateFees.maker;
     const rebateTakerChanged = state.rebateEnabled && fees.taker !== preRebateFees.taker;
 
-    html += `
-      <div class="result-card" style="--card-color: ${exchange.color}">
+    let card = _cardPool.get(exchange.id);
+
+    if (!card) {
+      // 1. 최초 1회 전체 DOM 노드 및 참조 객체 생성
+      card = { el: document.createElement('div'), refs: {} };
+      card.el.className = 'result-card';
+      card.el.style.setProperty('--card-color', exchange.color);
+
+      card.el.innerHTML = `
         <div class="result-card__header">
-          <span class="result-card__exchange" style="color:${exchange.color}">${exchange.name}</span>
-          <span class="result-card__tier">${matchedTier.tier}</span>
+          <span class="result-card__exchange" data-exchange="${exchange.id}" style="color:${exchange.color}">${exchange.name}</span>
+          <span class="result-card__tier ref-tier"></span>
         </div>
-        <div class="result-card__notice ${showCoinNotice ? 'result-card__notice--visible' : ''}">
-          ${t('noCoinDiscount')}
-        </div>
+        <div class="result-card__notice ref-notice">${t('noCoinDiscount')}</div>
         <div class="result-card__fees">
           <div class="fee-item">
-            <span class="fee-item__label">${t('maker')} ${isMakerLowest ? `<span class="fee-badge">${t('lowest')}</span>` : ''}</span>
-            <span class="fee-item__original ${rebateMakerChanged ? 'fee-item__original--visible' : ''}">${formatFee(preRebateFees.maker)}</span>
-            <span class="fee-item__value ${rebateMakerChanged ? 'fee-item__value--rebated' : ''} ${fees.maker < 0 ? 'fee-item__value--negative' : ''} ${isMakerLowest ? 'fee-item__value--lowest' : ''}">${formatFee(fees.maker)}</span>
+            <span class="fee-item__label">${t('maker')} <span class="fee-badge ref-maker-badge"></span></span>
+            <span class="fee-item__original ref-maker-orig"></span>
+            <span class="fee-item__value ref-maker-val"></span>
           </div>
           <div class="fee-item">
-            <span class="fee-item__label">${t('taker')} ${isTakerLowest ? `<span class="fee-badge">${t('lowest')}</span>` : ''}</span>
-            <span class="fee-item__original ${rebateTakerChanged ? 'fee-item__original--visible' : ''}">${formatFee(preRebateFees.taker)}</span>
-            <span class="fee-item__value ${rebateTakerChanged ? 'fee-item__value--rebated' : ''} ${fees.taker < 0 ? 'fee-item__value--negative' : ''} ${isTakerLowest ? 'fee-item__value--lowest' : ''}">${formatFee(fees.taker)}</span>
+            <span class="fee-item__label">${t('taker')} <span class="fee-badge ref-taker-badge"></span></span>
+            <span class="fee-item__original ref-taker-orig"></span>
+            <span class="fee-item__value ref-taker-val"></span>
           </div>
         </div>
-        <a href="${exchange.referralUrl}" target="_blank" rel="noopener" class="result-card__cta">
-          ${t('signUp')}
-        </a>
-      </div>
-    `;
+        <a href="${exchange.referralUrl}" target="_blank" rel="noopener" class="result-card__cta">${t('signUp')}</a>
+      `;
+
+      card.refs = {
+        tier: card.el.querySelector('.ref-tier'),
+        notice: card.el.querySelector('.ref-notice'),
+        makerBadge: card.el.querySelector('.ref-maker-badge'),
+        makerOrig: card.el.querySelector('.ref-maker-orig'),
+        makerVal: card.el.querySelector('.ref-maker-val'),
+        takerBadge: card.el.querySelector('.ref-taker-badge'),
+        takerOrig: card.el.querySelector('.ref-taker-orig'),
+        takerVal: card.el.querySelector('.ref-taker-val')
+      };
+
+      els.resultsInner.appendChild(card.el);
+      _cardPool.set(exchange.id, card);
+    }
+
+    // 2. 가비지 컬렉터 없이 이미 생성된 DOM 텍스트 내용, 표시여부만 고속 업데이트
+    card.el.style.display = 'block';
+    card.el.style.order = orderIndex; // CSS Grid 정렬 속성으로 DOM Move 방지
+
+    card.refs.tier.textContent = matchedTier.tier;
+    card.refs.notice.classList.toggle('result-card__notice--visible', showCoinNotice);
+
+    // Maker
+    card.refs.makerBadge.textContent = isMakerLowest ? t('lowest') : '';
+    card.refs.makerBadge.style.display = isMakerLowest ? 'inline-block' : 'none';
+    card.refs.makerOrig.textContent = formatFee(preRebateFees.maker);
+    card.refs.makerOrig.classList.toggle('fee-item__original--visible', rebateMakerChanged);
+    card.refs.makerVal.textContent = formatFee(fees.maker);
+    card.refs.makerVal.className = 'fee-item__value ref-maker-val ' +
+      (rebateMakerChanged ? 'fee-item__value--rebated ' : '') +
+      (fees.maker < 0 ? 'fee-item__value--negative ' : '') +
+      (isMakerLowest ? 'fee-item__value--lowest' : '');
+
+    // Taker
+    card.refs.takerBadge.textContent = isTakerLowest ? t('lowest') : '';
+    card.refs.takerBadge.style.display = isTakerLowest ? 'inline-block' : 'none';
+    card.refs.takerOrig.textContent = formatFee(preRebateFees.taker);
+    card.refs.takerOrig.classList.toggle('fee-item__original--visible', rebateTakerChanged);
+    card.refs.takerVal.textContent = formatFee(fees.taker);
+    card.refs.takerVal.className = 'fee-item__value ref-taker-val ' +
+      (rebateTakerChanged ? 'fee-item__value--rebated ' : '') +
+      (fees.taker < 0 ? 'fee-item__value--negative ' : '') +
+      (isTakerLowest ? 'fee-item__value--lowest' : '');
   });
 
-  els.resultsInner.innerHTML = html;
+  // 사용자가 체크 해제한(필터 아웃된) 거래소 카드들은 GPU 렌더링 파이프라인에서 제외(display:none)
+  _cardPool.forEach((card, exId) => {
+    if (!validResults.some(r => r.exchange.id === exId)) {
+      card.el.style.display = 'none';
+    }
+  });
 }
 
 // ============================================
