@@ -10,15 +10,15 @@ export default {
   sliderLabelVolume: '30일 거래대금',
   sliderLabelDeposit: '총 예치금',
 
-  coinDiscount: '✅ 거래소 코인 할인',
+  coinDiscount: '거래소 코인 할인',
   coinDiscountDesc: 'BNB, BGB, GT, KCS, MX 수수료 할인 적용',
-  rebate: '🎁 CompareFee 전용 리베이트',
+  rebate: 'CompareFee 페이백',
   rebateDesc: '레퍼럴을 통한 매 거래 캐시백',
 
   maker: '메이커',
   taker: '테이커',
   lowest: '최저',
-  signUp: '가입하고 리베이트 받기 →',
+  signUp: '가입하고 페이백 받기 →',
   noCoinDiscount: '네이티브 코인 할인 불가',
 
   tooltipMin: '최소',

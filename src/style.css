@@ -1367,8 +1367,21 @@ body.theme-light [data-exchange="okx"] {
     padding: var(--space-lg) 0 var(--space-md);
   }
 
+  .header__top {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .header__controls {
+    gap: 6px;
+  }
+
+  .logo__icon {
+    font-size: 1.4rem;
+  }
+
   .logo__text {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .controller__inner {
@@ -1381,8 +1394,20 @@ body.theme-light [data-exchange="okx"] {
     gap: var(--space-sm);
   }
 
+  .controller__row--toggles {
+    flex-direction: row;
+    gap: var(--space-sm);
+  }
+
+  .controller__row--switches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
   .toggle-btn {
-    padding: 8px 10px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
   }
 
   .toggle-group {
@@ -1482,12 +1507,19 @@ body.theme-light [data-exchange="okx"] {
 
   .switch-label {
     min-width: unset;
-    padding: 8px 12px;
-    gap: var(--space-sm);
+    padding: 6px 8px;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .switch {
+    transform: scale(0.85);
+    margin-right: -4px;
   }
 
   .switch-text__title {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
   }
 
   .hidden-mobile {

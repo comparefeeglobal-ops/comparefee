@@ -10,16 +10,16 @@ export default {
   sliderLabelVolume: '30 दिन का ट्रेडिंग वॉल्यूम',
   sliderLabelDeposit: 'कुल जमा',
 
-  coinDiscount: '✅ एक्सचेंज कॉइन छूट',
-  coinDiscountDesc: 'BNB, BGB, GT, KCS, MX शुल्क छूट लागू करें',
-  rebate: '🎁 CompareFee एक्सक्लूसिव रिबेट',
+  coinDiscount: 'एक्सचेंज कॉइन डिस्काउंट',
+  coinDiscountDesc: 'फीस डिस्काउंट के लिए BNB, BGB, GT, KCS, MX का उपयोग करें',
+  rebate: 'CompareFee एक्सक्लूसिव पेबैक (Payback)',
   rebateDesc: 'रेफरल के माध्यम से हर ट्रेड पर कैशबैक',
 
-  maker: 'मेकर',
-  taker: 'टेकर',
+  maker: 'मेकर (Maker)',
+  taker: 'टेकर (Taker)',
   lowest: 'न्यूनतम',
-  signUp: 'साइन अप करें और रिबेट पाएं →',
-  noCoinDiscount: 'नेटिव कॉइन छूट उपलब्ध नहीं',
+  signUp: 'साइन अप करें और पेबैक पाएं →',
+  noCoinDiscount: 'नेटिव कॉइन डिस्काउंट उपलब्ध नहीं',
 
   tooltipMin: 'न्यूनतम',
   tooltipMaker: 'मेकर',
@@ -27,8 +27,8 @@ export default {
   tooltipCoinMaker: 'कॉइन मेकर',
   tooltipCoinTaker: 'कॉइन टेकर',
 
-  disclaimer1: '⚠️ डेटा समय-समय पर अपडेट किया जाता है। वास्तविक शुल्क नीति परिवर्तन के कारण भिन्न हो सकते हैं।',
-  disclaimer2: 'रिबेट दरें और भुगतान CompareFee नीति और एक्सचेंज शर्तों के अनुसार हैं।',
-  disclaimer3: 'कुछ VIP स्तरों के लिए वॉल्यूम/जमा के अलावा अतिरिक्त संपत्ति शर्तें हो सकती हैं।',
+  disclaimer1: 'डेटा समय-समय पर अपडेट किया जाता है। रियल-टाइम पॉलिसी बदलावों के कारण वास्तविक शुल्क भिन्न हो सकते हैं।',
+  disclaimer2: 'पेबैक (Payback) दरें और भुगतान के तरीके CompareFee और प्रत्येक एक्सचेंज की नीतियों के अधीन हैं।',
+  disclaimer3: 'कुछ VIP टियर में ट्रेडिंग वॉल्यूम/डिपॉजिट के अलावा विशिष्ट संपत्ति रखने की आवश्यकता हो सकती है।',
   lastUpdated: 'अंतिम अपडेट',
 };

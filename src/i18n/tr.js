@@ -8,18 +8,19 @@ export default {
   volume: '30G Hacim',
   deposit: 'Depozito',
   sliderLabelVolume: '30 GÜNLÜK İŞLEM HACMİ',
-  sliderLabelDeposit: 'TOPLAM DEPOZİTO',
+  sliderLabelDeposit: 'TOPLAM DEPOZITO', // Switches
 
-  coinDiscount: '✅ Borsa Coin İndirimi',
-  coinDiscountDesc: 'BNB, BGB, GT, KCS, MX ücret indirimi uygula',
-  rebate: '🎁 CompareFee Özel İndirim',
-  rebateDesc: 'Referans ile her işlemde nakit iade',
+  coinDiscount: 'Borsa Coin İndirimi',
+  coinDiscountDesc: 'BNB, BGB, GT, KCS, MX indirimlerini uygula',
+  rebate: 'CompareFee Özel Geri Ödeme (Payback)',
+  rebateDesc: 'Referansla her işlemde nakit iade (Cashback)',
 
-  maker: 'YAPICI',
-  taker: 'ALICI',
+  // Cards
+  maker: 'PİYASA YAPICI (Maker)',
+  taker: 'PİYASA ALICI (Taker)',
   lowest: 'En Düşük',
-  signUp: 'Kaydol ve İndirim Al →',
-  noCoinDiscount: 'Yerli coin indirimi mevcut değil',
+  signUp: 'Kayıt Ol ve Payback Kazan →',
+  noCoinDiscount: 'Yerel coin indirimi yok',
 
   tooltipMin: 'Minimum',
   tooltipMaker: 'Yapıcı',
@@ -27,8 +28,9 @@ export default {
   tooltipCoinMaker: 'Coin Yapıcı',
   tooltipCoinTaker: 'Coin Alıcı',
 
-  disclaimer1: '⚠️ Veriler periyodik olarak güncellenir. Gerçek ücretler borsa politika değişikliklerine bağlı olarak farklılık gösterebilir.',
-  disclaimer2: 'İndirim oranları ve ödeme yöntemleri CompareFee politikası ve borsa koşullarına tabidir.',
-  disclaimer3: 'Bazı VIP seviyeleri hacim/depozito dışında ek varlık tutma koşulları gerektirebilir.',
+  // Disclaimer
+  disclaimer1: '⚠️ Veriler düzenli olarak güncellenir. Gerçek komisyon oranları değişebilir.',
+  disclaimer2: 'Payback oranları CompareFee ve borsa politikalarına tabidir.',
+  disclaimer3: 'Bazı VIP seviyeleri hacim/depozito dışında ekstra varlık şartı isteyebilir.',
   lastUpdated: 'Son güncelleme',
 };

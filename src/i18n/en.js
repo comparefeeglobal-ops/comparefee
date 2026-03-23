@@ -13,16 +13,16 @@ export default {
   sliderLabelDeposit: 'TOTAL DEPOSIT',
 
   // Switches
-  coinDiscount: '✅ Exchange Coin Discount',
+  coinDiscount: 'Exchange Coin Discount',
   coinDiscountDesc: 'Apply BNB, BGB, GT, KCS, MX fee discount',
-  rebate: '🎁 CompareFee Exclusive Rebate',
+  rebate: 'CompareFee Payback',
   rebateDesc: 'Cashback on every trade via referral',
 
   // Cards
   maker: 'MAKER',
   taker: 'TAKER',
   lowest: 'Lowest',
-  signUp: 'Sign Up & Get Rebate →',
+  signUp: 'Sign Up & Get Payback →',
   noCoinDiscount: 'No native coin discount available',
 
   // Tooltip
@@ -34,7 +34,7 @@ export default {
 
   // Disclaimer
   disclaimer1: '⚠️ Data is updated periodically. Actual fees may differ due to real-time policy changes.',
-  disclaimer2: 'Rebate rates and payment methods follow CompareFee policy and each exchange\'s terms.',
+  disclaimer2: 'Payback rates and payment methods follow CompareFee policy and each exchange\'s terms.',
   disclaimer3: 'Some VIP tiers may require additional asset holdings beyond volume/deposit.',
   lastUpdated: 'Last updated',
 };
