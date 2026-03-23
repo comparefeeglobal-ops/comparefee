@@ -8,7 +8,7 @@ export default {
   volume: '30G Hacim',
   deposit: 'Depozito',
   sliderLabelVolume: '30 GÜNLÜK İŞLEM HACMİ',
-  sliderLabelDeposit: 'TOPLAM DEPOZITO', // Switches
+  sliderLabelDeposit: 'DEPOZITO / VARLIK',
 
   coinDiscount: 'Coin İndirimi',
   coinDiscountDesc: 'Bazı borsalar, işlem ücretini kendi native coiniyle ödeyince indirim uygular.',

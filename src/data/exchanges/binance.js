@@ -10,6 +10,7 @@ export default {
   nativeCoin: "BNB",
   coinDiscountRate: 0.1,
   depositCurrency: 'BNB',   // depositBased min values are in BNB units
+  tierRule: 'and',           // volume AND deposit must BOTH be met
   referralUrl: "https://accounts.binance.com/register?ref=FEERADAR",
   rebate: { spot: 0.2, futures: 0.2 },
   active: true,

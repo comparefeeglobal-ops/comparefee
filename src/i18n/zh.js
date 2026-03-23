@@ -8,7 +8,7 @@ export default {
   volume: '30日交易量',
   deposit: '存款',
   sliderLabelVolume: '30日交易额',
-  sliderLabelDeposit: '总存款',
+  sliderLabelDeposit: '存款 / 持仓',
 
   coinDiscount: '平台币折扣',
   coinDiscountDesc: '部分交易所支持用平台币支付手续费，可享受费率优惠。',

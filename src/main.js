@@ -19,12 +19,12 @@ import { t, setLanguage, initI18n } from './i18n/index.js';
 // ============================================
 const state = {
   market: 'futures',       // 'spot' | 'futures'
-  criteria: 'volume',   // 'volume' | 'deposit'
-  userValue: 1_000_000, // user's input value
+  volumeValue: 1_000_000,  // 30-day trading volume (USDT)
+  depositValue: 0,          // deposit / holding (USDT)
   coinDiscount: false,
   rebateEnabled: false,
   sortBy: 'taker',      // 'taker' | 'maker' | 'name'
-  activeExchangeIds: exchanges.map(ex => ex.id), 
+  activeExchangeIds: exchanges.map(ex => ex.id),
 };
 
 function saveState() {
@@ -37,8 +37,8 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed.market) state.market = parsed.market;
-      if (parsed.criteria) state.criteria = parsed.criteria;
-      if (typeof parsed.userValue === 'number') state.userValue = parsed.userValue;
+      if (typeof parsed.volumeValue === 'number') state.volumeValue = parsed.volumeValue;
+      if (typeof parsed.depositValue === 'number') state.depositValue = parsed.depositValue;
       if (typeof parsed.coinDiscount === 'boolean') state.coinDiscount = parsed.coinDiscount;
       // rebateEnabled intentionally excluded — payback service not yet launched
       if (parsed.sortBy) state.sortBy = parsed.sortBy;
@@ -54,17 +54,17 @@ function loadState() {
 // ============================================
 const els = {
   marketToggle: document.getElementById('marketToggle'),
-  criteriaToggle: document.getElementById('criteriaToggle'),
-  slider: document.getElementById('valueSlider'),
-  sliderFill: document.getElementById('sliderFill'),
-  sliderTicks: document.getElementById('sliderTicks'),
-  sliderLabel: document.getElementById('sliderLabel'),
-  valueInput: document.getElementById('valueInput'),
+  volumeSlider: document.getElementById('volumeSlider'),
+  volumeFill: document.getElementById('volumeFill'),
+  volumeTicks: document.getElementById('volumeTicks'),
+  volumeInput: document.getElementById('volumeInput'),
+  depositSlider: document.getElementById('depositSlider'),
+  depositFill: document.getElementById('depositFill'),
+  depositTicks: document.getElementById('depositTicks'),
+  depositInput: document.getElementById('depositInput'),
   coinDiscountCheck: document.getElementById('coinDiscountCheck'),
   rebateCheck: document.getElementById('rebateCheck'),
   chartArea: document.getElementById('chartArea'),
-  chartMarker: document.getElementById('chartMarker'),
-  markerLabel: document.getElementById('markerLabel'),
   yAxis: document.getElementById('yAxis'),
   resultsInner: document.getElementById('resultsInner'),
   chartContainer: document.getElementById('chartContainer'),
@@ -86,7 +86,7 @@ function init() {
   loadState();
   setupTheme();
   setupToggles();
-  setupSlider();
+  setupDualSliders();
   setupSwitches();
   setupSliderTicks();
   setupYAxis();
@@ -94,7 +94,6 @@ function init() {
   setupSortBar();
   setupFilterDropdown();
   initI18n(() => {
-    updateSliderLabel();
     render();
   });
 }
@@ -111,16 +110,6 @@ function setupToggles() {
     saveState();
     render();
   });
-
-  els.criteriaToggle.addEventListener('click', (e) => {
-    const btn = e.target.closest('.toggle-btn');
-    if (!btn) return;
-    state.criteria = btn.dataset.value;
-    updateToggleUI(els.criteriaToggle, state.criteria);
-    updateSliderLabel();
-    saveState();
-    render();
-  });
 }
 
 function updateToggleUI(container, activeValue) {
@@ -134,76 +123,51 @@ function updateToggleUI(container, activeValue) {
 // ============================================
 let renderRafId = null;
 
-function setupSlider() {
-  els.slider.addEventListener('input', () => {
-    const position = els.slider.value / 1000;
-    state.userValue = sliderToValue(position);
-    syncInputFromValue();
-    updateSliderFill();
-    
-    // 마커 선과 라벨은 가벼우므로 즉시(Instantly) 이동시켜서 Delay, Lag 제거
-    const chartHeight = els.chartArea.offsetHeight || 480;
-    renderMarker(chartHeight);
+function setupOneSlider(slider, input, fill, stateKey) {
+  slider.addEventListener('input', () => {
+    const position = slider.value / 1000;
+    state[stateKey] = sliderToValue(position);
+    input.value = Math.round(state[stateKey]).toLocaleString('en-US');
+    fill.style.width = (slider.value / 1000 * 100) + '%';
 
-    // 차트 박스와 계산 등의 무거운 렌더링 작업은 다음 프레임으로 분산 (60fps 보장)
     if (renderRafId) cancelAnimationFrame(renderRafId);
-    renderRafId = requestAnimationFrame(() => {
-      render();
-    });
+    renderRafId = requestAnimationFrame(() => render());
   });
 
-  // 슬라이더 조작이 끝났을 때(마우스/터치 뗐을 때)만 스토리지에 저장 (I/O 병목 방지)
-  els.slider.addEventListener('change', () => {
-    saveState();
-  });
+  slider.addEventListener('change', () => saveState());
 
-  els.valueInput.addEventListener('input', (e) => {
+  input.addEventListener('input', (e) => {
     const raw = e.target.value.replace(/[^0-9.]/g, '');
     const num = parseFloat(raw);
     if (!isNaN(num) && num >= 0) {
-      state.userValue = num;
-      syncSliderFromValue();
+      state[stateKey] = num;
+      const pos = valueToSlider(num);
+      slider.value = Math.round(pos * 1000);
+      fill.style.width = (slider.value / 1000 * 100) + '%';
       saveState();
       render();
     }
   });
 
+  input.addEventListener('blur', () => {
+    input.value = Math.round(state[stateKey]).toLocaleString('en-US');
+  });
+
+  // Initialize position from state
+  const pos = valueToSlider(state[stateKey]);
+  slider.value = Math.round(pos * 1000);
+  fill.style.width = (slider.value / 1000 * 100) + '%';
+  input.value = Math.round(state[stateKey]).toLocaleString('en-US');
+}
+
+function setupDualSliders() {
+  setupOneSlider(els.volumeSlider, els.volumeInput, els.volumeFill, 'volumeValue');
+  setupOneSlider(els.depositSlider, els.depositInput, els.depositFill, 'depositValue');
+
   window.addEventListener('resize', () => {
     if (renderRafId) cancelAnimationFrame(renderRafId);
-    renderRafId = requestAnimationFrame(() => {
-      render();
-    });
+    renderRafId = requestAnimationFrame(() => render());
   });
-
-  els.valueInput.addEventListener('blur', () => {
-    syncInputFromValue();
-  });
-
-  // Initialize
-  syncSliderFromValue();
-  updateSliderFill();
-}
-
-function syncInputFromValue() {
-  const v = Math.round(state.userValue);
-  els.valueInput.value = v.toLocaleString('en-US');
-}
-
-function syncSliderFromValue() {
-  const pos = valueToSlider(state.userValue);
-  els.slider.value = Math.round(pos * 1000);
-  updateSliderFill();
-}
-
-function updateSliderFill() {
-  const pct = (els.slider.value / 1000) * 100;
-  els.sliderFill.style.width = pct + '%';
-}
-
-function updateSliderLabel() {
-  els.sliderLabel.textContent = state.criteria === 'volume' 
-    ? t('sliderLabelVolume') 
-    : t('sliderLabelDeposit');
 }
 
 // ============================================
@@ -238,7 +202,6 @@ function setupTheme() {
 function setupLangSelect() {
   els.langSelect.addEventListener('change', (e) => {
     setLanguage(e.target.value, () => {
-      updateSliderLabel();
       // 언어 변경 시, 번역 텍스트가 DOM에 반영되도록 카드 캐시 초기화
       if (typeof _cardPool !== 'undefined') {
         _cardPool.clear();
@@ -260,7 +223,8 @@ function setupSliderTicks() {
       <div class="slider-tick__label">${formatUSD(v)}</div>
     </div>`;
   }).join('');
-  els.sliderTicks.innerHTML = html;
+  els.volumeTicks.innerHTML = html;
+  els.depositTicks.innerHTML = html;
 }
 
 // ============================================
@@ -427,41 +391,57 @@ let _lastResults = [];
 
 function render() {
   const chartHeight = els.chartArea.offsetHeight || 480;
-  // Filter active and user-selected exchanges
   const activeExchanges = exchanges.filter(ex => ex.active && state.activeExchangeIds.includes(ex.id));
 
-  // Get data for current market + criteria
   const results = activeExchanges.map(ex => {
     const marketData = ex[state.market]; // spot or futures
-    const tierData = marketData[state.criteria === 'volume' ? 'volumeBased' : 'depositBased'];
+    const volTiers = marketData.volumeBased;
+    const depTiers = marketData.depositBased;
 
-    // Check if this criteria exists for this exchange
-    if (!tierData || tierData.length === 0) {
+    if (!volTiers || volTiers.length === 0) {
       return { exchange: ex, disabled: true, tiers: [], matchedTier: null, fees: null };
     }
 
-    // depositBased tiers for Binance/KuCoin are in native coin units (BNB/KCS).
-    // Convert user's USDT value to native coin units before tier matching.
-    const effectiveValue = (state.criteria === 'deposit' && ex.depositUSDTRate)
-      ? state.userValue / ex.depositUSDTRate
-      : state.userValue;
+    // Volume tier matching
+    const volResult = findUserTier(volTiers, state.volumeValue);
 
-    const { tierIndex, tier } = findUserTier(tierData, effectiveValue);
-    
+    // Deposit tier matching (convert USDT → native coin if needed)
+    let depResult = null;
+    if (depTiers && depTiers.length > 0) {
+      const depositEffective = ex.depositUSDTRate
+        ? state.depositValue / ex.depositUSDTRate
+        : state.depositValue;
+      depResult = findUserTier(depTiers, depositEffective);
+    }
+
+    // AND/OR tier resolution
+    let finalTierIndex;
+    if (ex.tierRule === 'and') {
+      // Binance: must meet BOTH volume AND deposit → take the lower tier
+      finalTierIndex = depResult
+        ? Math.min(volResult.tierIndex, depResult.tierIndex)
+        : volResult.tierIndex;
+    } else {
+      // Everyone else: meet EITHER volume OR deposit → take the higher tier
+      finalTierIndex = depResult
+        ? Math.max(volResult.tierIndex, depResult.tierIndex)
+        : volResult.tierIndex;
+    }
+
+    const tier = volTiers[finalTierIndex];
+
     const rebateRate = state.rebateEnabled ? ex.rebate[state.market] : 0;
     const fees = calculateFees(tier, {
       coinDiscount: state.coinDiscount,
       rebateRate,
     });
-
-    // Base fees (no discount, no rebate) for comparison
     const baseFees = calculateFees(tier, { coinDiscount: false, rebateRate: 0 });
 
     return {
       exchange: ex,
       disabled: false,
-      tiers: tierData,
-      matchedTierIndex: tierIndex,
+      tiers: volTiers,
+      matchedTierIndex: finalTierIndex,
       matchedTier: tier,
       fees,
       baseFees,
@@ -470,7 +450,6 @@ function render() {
   });
 
   renderChart(results, chartHeight);
-  renderMarker(chartHeight);
   _lastResults = results;
   renderCards(results);
 }
@@ -553,6 +532,7 @@ function renderChart(results, chartHeight) {
           block.appendChild(lbl);
         }
 
+
         block.addEventListener('mouseenter', (e) => showTooltip(e, tier, exchange));
         block.addEventListener('mousemove', moveTooltip);
         block.addEventListener('mouseleave', hideTooltip);
@@ -562,18 +542,6 @@ function renderChart(results, chartHeight) {
   });
 }
 
-// ============================================
-// Chart Marker
-// ============================================
-function renderMarker(chartHeight) {
-  const y = valueToY(state.userValue, chartHeight);
-  els.chartMarker.style.top = y + 'px';
-  // Also update global fixed marker label height
-  if (els.markerLabel) {
-    els.markerLabel.style.top = y + 'px';
-    els.markerLabel.textContent = formatUSD(state.userValue);
-  }
-}
 
 // ============================================
 // Result Cards (DOM Pooling Optimized)

@@ -8,7 +8,7 @@ export default {
   volume: '30일 거래량',
   deposit: '예치금',
   sliderLabelVolume: '30일 거래대금',
-  sliderLabelDeposit: '총 예치금',
+  sliderLabelDeposit: '예치 / 보유량',
 
   coinDiscount: '거래소코인으로 지불',
   coinDiscountDesc: '일부 거래소는 거래소 자체 코인으로 수수료 지불시 수수료가 할인됩니다.',

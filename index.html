@@ -69,7 +69,7 @@
     <!-- Master Controller -->
     <section class="controller" id="controller">
       <div class="controller__inner">
-        <!-- Row 1: Market + Criteria toggles -->
+        <!-- Row 1: Market toggle -->
         <div class="controller__row controller__row--toggles">
           <div class="toggle-group" id="marketToggle">
             <label class="toggle-group__label" data-i18n="market">MARKET</label>
@@ -78,29 +78,40 @@
               <button class="toggle-btn" data-value="spot" data-i18n="spot">Spot</button>
             </div>
           </div>
-          <div class="toggle-group" id="criteriaToggle">
-            <label class="toggle-group__label" data-i18n="vipCriteria">VIP CRITERIA</label>
-            <div class="toggle-buttons">
-              <button class="toggle-btn toggle-btn--active" data-value="volume" data-i18n="volume">30D Volume</button>
-              <button class="toggle-btn" data-value="deposit" data-i18n="deposit">Deposit</button>
+        </div>
+
+        <!-- Volume Slider -->
+        <div class="controller__row controller__row--slider">
+          <div class="slider-group">
+            <div class="slider-group__header">
+              <label class="slider-group__label" data-i18n="sliderLabelVolume">30-DAY TRADING VOLUME</label>
+              <div class="slider-input-wrap">
+                <span class="slider-input-prefix">$</span>
+                <input type="text" id="volumeInput" class="slider-input" value="1,000,000" />
+              </div>
+            </div>
+            <div class="slider-container">
+              <div class="slider-ticks" id="volumeTicks"></div>
+              <input type="range" id="volumeSlider" class="slider" min="0" max="1000" value="300" />
+              <div class="slider-track-fill" id="volumeFill"></div>
             </div>
           </div>
         </div>
 
-        <!-- Row 3: Slider + Input (Moved DOWN to touch the chart) -->
+        <!-- Deposit Slider -->
         <div class="controller__row controller__row--slider">
           <div class="slider-group">
             <div class="slider-group__header">
-              <label class="slider-group__label" id="sliderLabel" data-i18n="sliderLabelVolume">30-DAY TRADING VOLUME</label>
+              <label class="slider-group__label" data-i18n="sliderLabelDeposit">DEPOSIT / HOLDING</label>
               <div class="slider-input-wrap">
                 <span class="slider-input-prefix">$</span>
-                <input type="text" id="valueInput" class="slider-input" value="1,000,000" />
+                <input type="text" id="depositInput" class="slider-input" value="0" />
               </div>
             </div>
             <div class="slider-container">
-              <div class="slider-ticks" id="sliderTicks"></div>
-              <input type="range" id="valueSlider" class="slider" min="0" max="1000" value="300" />
-              <div class="slider-track-fill" id="sliderFill"></div>
+              <div class="slider-ticks" id="depositTicks"></div>
+              <input type="range" id="depositSlider" class="slider" min="0" max="1000" value="0" />
+              <div class="slider-track-fill" id="depositFill"></div>
             </div>
           </div>
         </div>
@@ -141,15 +152,9 @@
           <!-- Y-axis labels (sticky) -->
           <div class="chart__y-axis" id="yAxis"></div>
           
-          <!-- Fixed Marker Label overlapping Y-axis -->
-          <div class="chart__marker-label" id="markerLabel"></div>
-
           <!-- Scrollable chart area -->
           <div class="chart-scroll-wrapper">
             <div class="chart__area" id="chartArea">
-              <div class="chart__marker" id="chartMarker">
-                <div class="chart__marker-line"></div>
-              </div>
             </div>
           </div>
         </div>

@@ -170,12 +170,15 @@ async function main() {
 
   // Attach depositUSDTRate to each exchange that needs it
   const enriched = valid.map(ex => {
-    if (!ex.depositCurrency) return ex;
-    const rate = prices[ex.depositCurrency] ?? null;
-    if (rate === null) {
-      console.warn(`⚠️  ${ex.name}: depositUSDTRate set to null (fetch failed) — deposit tier matching will be disabled`);
+    const enrichedEx = { ...ex };
+    if (ex.depositCurrency) {
+      const rate = prices[ex.depositCurrency] ?? null;
+      if (rate === null) {
+        console.warn(`⚠️  ${ex.name}: depositUSDTRate set to null (fetch failed) — deposit tier matching will be disabled`);
+      }
+      enrichedEx.depositUSDTRate = rate;
     }
-    return { ...ex, depositUSDTRate: rate };
+    return enrichedEx;
   });
 
   const fileContent = generateDataFile(enriched);

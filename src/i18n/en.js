@@ -10,7 +10,7 @@ export default {
   volume: '30D Volume',
   deposit: 'Deposit',
   sliderLabelVolume: '30-DAY TRADING VOLUME',
-  sliderLabelDeposit: 'TOTAL DEPOSIT',
+  sliderLabelDeposit: 'DEPOSIT / HOLDING',
 
   // Switches
   coinDiscount: 'Coin Discount',

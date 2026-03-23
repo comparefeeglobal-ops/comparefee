@@ -8,7 +8,7 @@ export default {
   volume: '30 दिन का वॉल्यूम',
   deposit: 'जमा',
   sliderLabelVolume: '30 दिन का ट्रेडिंग वॉल्यूम',
-  sliderLabelDeposit: 'कुल जमा',
+  sliderLabelDeposit: 'जमा / होल्डिंग',
 
   coinDiscount: 'कॉइन डिस्काउंट',
   coinDiscountDesc: 'कुछ एक्सचेंज नेटिव टोकन से फीस भुगतान पर डिस्काउंट देते हैं।',
