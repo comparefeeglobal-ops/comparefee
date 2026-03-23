@@ -1,26 +1,40 @@
 #!/usr/bin/env node
 /**
- * CompareFee - Fee Data Collection Script
+ * CompareFee - Fee Data Compiler
  *
  * Run: node scripts/collect.js
- * 
- * This script:
- * 1. Calls each exchange adapter to get the latest fee data
- * 2. Validates the data (sanity checks)
- * 3. Generates a fresh src/data/exchangeData.js
- * 4. GitHub Actions commits and pushes the changes daily
+ *
+ * Reads all manually maintained exchange files from src/data/exchanges/,
+ * validates them, and writes a fresh src/data/exchangeData.js.
+ *
+ * To add a new exchange:
+ * 1. Create src/data/exchanges/[id].js following __template.js
+ * 2. Import it below and add to the EXCHANGES array
  */
 
 import { writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { fetchBinance } from './adapters/binance.js';
-import { fetchBybit }   from './adapters/bybit.js';
-import { fetchOKX }     from './adapters/okx.js';
-import { fetchBitget }  from './adapters/bitget.js';
-import { fetchGate }    from './adapters/gate.js';
-import { fetchKucoin }  from './adapters/kucoin.js';
-import { fetchMexc }    from './adapters/mexc.js';
+
+import binance from '../src/data/exchanges/binance.js';
+import bybit   from '../src/data/exchanges/bybit.js';
+import okx     from '../src/data/exchanges/okx.js';
+import bitget  from '../src/data/exchanges/bitget.js';
+import gate    from '../src/data/exchanges/gate.js';
+import kucoin  from '../src/data/exchanges/kucoin.js';
+import lbank   from '../src/data/exchanges/lbank.js';
+import bingx   from '../src/data/exchanges/bingx.js';
+import bitunix from '../src/data/exchanges/bitunix.js';
+import htx     from '../src/data/exchanges/htx.js';
+import bitmart from '../src/data/exchanges/bitmart.js';
+import coinw   from '../src/data/exchanges/coinw.js';
+import toobit  from '../src/data/exchanges/toobit.js';
+import xt      from '../src/data/exchanges/xt.js';
+
+const EXCHANGES = [
+  binance, bybit, okx, bitget, gate, kucoin,
+  lbank, bingx, bitunix, htx, bitmart, coinw, toobit, xt,
+];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_PATH = join(__dirname, '../src/data/exchangeData.js');
@@ -34,7 +48,7 @@ function validateExchange(data) {
 
   if (!data.id || !data.name) errors.push('Missing id or name');
   if (!data.spot || !data.futures) errors.push('Missing spot or futures data');
-  if (!data.rebate?.spot || !data.rebate?.futures) errors.push('Missing rebate rates');
+  if (data.rebate?.spot == null || data.rebate?.futures == null) errors.push('Missing rebate rates');
 
   const validateTiers = (tiers, label) => {
     if (!Array.isArray(tiers) || tiers.length === 0) {
@@ -42,20 +56,18 @@ function validateExchange(data) {
       return;
     }
     tiers.forEach((t, i) => {
-      // Sanity check: fees should be between -0.1% and 0.5%
+      if (t.min === Infinity) errors.push(`${label}[${i}] (${t.tier}): min is Infinity — remove this tier or set a real threshold`);
       if (t.maker < -0.1 || t.maker > 0.5) errors.push(`${label}[${i}] maker out of range: ${t.maker}`);
       if (t.taker < -0.1 || t.taker > 0.5) errors.push(`${label}[${i}] taker out of range: ${t.taker}`);
-      // Taker should generally be >= maker (negative makers are intentional rebates)
-      if (t.taker < t.maker) errors.push(`${label}[${i}] taker (${t.taker}) < maker (${t.maker}) — verify this is correct`);
     });
   };
 
   if (data.spot) {
-    validateTiers(data.spot.volumeBased, `${data.name} spot.volumeBased`);
+    validateTiers(data.spot.volumeBased,  `${data.name} spot.volumeBased`);
     validateTiers(data.spot.depositBased, `${data.name} spot.depositBased`);
   }
   if (data.futures) {
-    validateTiers(data.futures.volumeBased, `${data.name} futures.volumeBased`);
+    validateTiers(data.futures.volumeBased,  `${data.name} futures.volumeBased`);
     validateTiers(data.futures.depositBased, `${data.name} futures.depositBased`);
   }
 
@@ -72,7 +84,7 @@ function generateDataFile(exchanges) {
 
   return `/**
  * CompareFee - Exchange Fee Data
- * 
+ *
  * ⚠️  AUTO-GENERATED FILE — Do not edit manually!
  *     Last updated: ${timestamp}
  *     Run 'node scripts/collect.js' to refresh.
@@ -86,66 +98,46 @@ export const exchanges = ${json};
 // Main
 // ============================================================
 
-async function main() {
-  console.log('🚀 CompareFee fee data collection started');
+function main() {
+  console.log('🚀 CompareFee fee data compiler started');
   console.log(`📅 ${new Date().toISOString()}\n`);
 
-  // Fetch all exchanges (fail-fast on complete failure, continue on partial)
-  const fetchers = [
-    { name: 'Binance', fn: fetchBinance },
-    { name: 'Bybit',   fn: fetchBybit },
-    { name: 'OKX',     fn: fetchOKX },
-    { name: 'Bitget',  fn: fetchBitget },
-    { name: 'Gate.io', fn: fetchGate },
-    { name: 'KuCoin',  fn: fetchKucoin },
-    { name: 'MEXC',    fn: fetchMexc },
-  ];
-
-  const results = await Promise.allSettled(fetchers.map(f => f.fn()));
-  
-  const exchanges = [];
+  const valid = [];
   let hasErrors = false;
 
-  results.forEach((result, i) => {
-    const { name } = fetchers[i];
-    if (result.status === 'rejected') {
-      console.error(`❌ ${name}: fetch failed — ${result.reason}`);
-      hasErrors = true;
-      return;
+  for (const exchange of EXCHANGES) {
+    if (!exchange.active) {
+      console.log(`⏭️  ${exchange.name}: skipped (active: false)`);
+      continue;
     }
 
-    const data = result.value;
-    const errors = validateExchange(data);
-
+    const errors = validateExchange(exchange);
     if (errors.length > 0) {
-      console.error(`❌ ${name}: validation failed`);
+      console.error(`❌ ${exchange.name}: validation failed`);
       errors.forEach(e => console.error(`   - ${e}`));
       hasErrors = true;
-      return;
+    } else {
+      console.log(`✅ ${exchange.name}: OK (spot ${exchange.spot.volumeBased.length} vol tiers, futures ${exchange.futures.volumeBased.length} vol tiers)`);
+      valid.push(exchange);
     }
+  }
 
-    console.log(`✅ ${name}: OK (${data.spot.volumeBased.length} spot tiers)`);
-    exchanges.push(data);
-  });
+  console.log('');
 
-  if (exchanges.length === 0) {
-    console.error('\n💥 All fetchers failed — aborting. exchangeData.js NOT updated.');
+  if (valid.length === 0) {
+    console.error('💥 No valid exchanges — aborting. exchangeData.js NOT updated.');
     process.exit(1);
   }
 
   if (hasErrors) {
-    console.warn('\n⚠️  Some fetchers failed. Writing data for successful exchanges only.');
+    console.warn('⚠️  Some exchanges failed validation and were excluded.');
   }
 
-  // Write output
-  const fileContent = generateDataFile(exchanges);
+  const fileContent = generateDataFile(valid);
   writeFileSync(OUTPUT_PATH, fileContent, 'utf8');
 
-  console.log(`\n✅ exchangeData.js updated with ${exchanges.length} exchanges`);
+  console.log(`✅ exchangeData.js updated with ${valid.length} exchanges`);
   console.log(`📁 ${OUTPUT_PATH}`);
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+main();
