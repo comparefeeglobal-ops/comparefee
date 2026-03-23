@@ -168,6 +168,13 @@ function setupSlider() {
     }
   });
 
+  window.addEventListener('resize', () => {
+    if (renderRafId) cancelAnimationFrame(renderRafId);
+    renderRafId = requestAnimationFrame(() => {
+      render();
+    });
+  });
+
   els.valueInput.addEventListener('blur', () => {
     syncInputFromValue();
   });
@@ -444,11 +451,14 @@ function render() {
 // ============================================
 // Chart Rendering
 // ============================================
-const COL_WIDTH = 88; // px — must match CSS .exchange-column width
+function getColWidth() {
+  return window.innerWidth <= 768 ? 44 : 88;
+}
 
 function renderChart(results, chartHeight) {
   // Dynamically set chartArea width so horizontal scroll works
-  const totalWidth = results.length * (COL_WIDTH + 2); // +2 for gap
+  const colWidth = getColWidth();
+  const totalWidth = results.length * (colWidth + 2); // +2 for gap
   els.chartArea.style.minWidth = totalWidth + 'px';
   
   // Make an array of existing columns to easily remove excess
@@ -616,7 +626,7 @@ function renderCards(results) {
     }
 
     // 2. 가비지 컬렉터 없이 이미 생성된 DOM 텍스트 내용, 표시여부만 고속 업데이트
-    card.el.style.display = 'block';
+    card.el.style.display = ''; // CSS 미디어 속성(flex/block)을 존중하도록 비움
     card.el.style.order = orderIndex; // CSS Grid 정렬 속성으로 DOM Move 방지
 
     card.refs.tier.textContent = matchedTier.tier;
