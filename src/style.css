@@ -430,6 +430,13 @@ body::before {
   width: 100%;
 }
 
+.slider-group__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
 .slider-group__label {
   display: block;
   font-size: 0.75rem;
@@ -437,7 +444,7 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted);
-  margin-bottom: var(--space-md);
+  margin-bottom: 0;
 }
 
 .slider-container {
@@ -524,12 +531,11 @@ body::before {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: var(--space-md);
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 10px 14px;
-  max-width: 280px;
+  padding: 6px 12px;
+  max-width: 160px;
   transition: border-color 0.2s ease;
 }
 
@@ -550,10 +556,11 @@ body::before {
   outline: none;
   color: var(--text-primary);
   font-family: var(--font);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   width: 100%;
   letter-spacing: 0.02em;
+  text-align: right;
 }
 
 /* Switches */
@@ -1365,12 +1372,17 @@ body.theme-light [data-exchange="okx"] {
   }
 
   .controller__inner {
-    padding: var(--space-md);
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+    gap: var(--space-md);
   }
 
   .controller__row {
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .toggle-btn {
+    padding: 8px 10px;
   }
 
   .toggle-group {
@@ -1394,19 +1406,122 @@ body.theme-light [data-exchange="okx"] {
   }
 
   .results__inner {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .result-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    gap: var(--space-xs);
+  }
+
+  .result-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 0;
+    min-width: 70px;
+    flex: 1;
+  }
+
+  .result-card__exchange {
+    font-size: 0.85rem;
+  }
+
+  .result-card__tier {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+
+  .result-card__notice {
+    display: none !important;
+  }
+
+  .result-card__fees {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-sm);
+    margin: 0;
+  }
+
+  .fee-item {
+    gap: 2px;
+  }
+
+  .fee-item__label {
+    font-size: 0.55rem;
+  }
+
+  .fee-item__value {
+    font-size: 0.85rem;
+  }
+
+  .fee-item__original {
+    font-size: 0.7rem;
+  }
+
+  .result-card__cta {
+    display: inline-block;
+    width: auto;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .fee-badge {
+    transform: scale(0.85);
+    margin-left: 2px;
+    vertical-align: text-bottom;
   }
 
   .switch-label {
     min-width: unset;
+    padding: 8px 12px;
+    gap: var(--space-sm);
+  }
+
+  .switch-text__title {
+    font-size: 0.8rem;
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  /* Pillar compression */
+  .exchange-column {
+    width: 44px;
+  }
+  
+  .exchange-column__name {
+    font-size: 0.65rem;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    overflow: visible;
+  }
+  
+  /* Zig-Zag Labels */
+  .exchange-column:nth-child(odd) .exchange-column__label {
+    bottom: -32px;
+  }
+  
+  .exchange-column:nth-child(even) .exchange-column__label {
+    bottom: -48px;
+  }
+  
+  .chart-scroll-wrapper {
+    padding-bottom: 60px;
+    margin-bottom: -60px;
   }
 }
 
 @media (max-width: 480px) {
-  .results__inner {
-    grid-template-columns: 1fr;
-  }
-
   .chart-container {
     height: 320px;
   }

@@ -87,23 +87,7 @@
           </div>
         </div>
 
-        <!-- Row 2: Slider + Input -->
-        <div class="controller__row controller__row--slider">
-          <div class="slider-group">
-            <label class="slider-group__label" id="sliderLabel" data-i18n="sliderLabelVolume">30-DAY TRADING VOLUME</label>
-            <div class="slider-container">
-              <div class="slider-ticks" id="sliderTicks"></div>
-              <input type="range" id="valueSlider" class="slider" min="0" max="1000" value="300" />
-              <div class="slider-track-fill" id="sliderFill"></div>
-            </div>
-            <div class="slider-input-wrap">
-              <span class="slider-input-prefix">$</span>
-              <input type="text" id="valueInput" class="slider-input" value="1,000,000" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Row 3: Option switches -->
+        <!-- Row 2: Option switches (Moved UP for Mobile UX) -->
         <div class="controller__row controller__row--switches">
           <label class="switch-label" id="coinDiscountSwitch">
             <div class="switch">
@@ -112,7 +96,7 @@
             </div>
             <div class="switch-text">
               <span class="switch-text__title" data-i18n="coinDiscount">✅ Exchange Coin Discount</span>
-              <span class="switch-text__desc" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
+              <span class="switch-text__desc hidden-mobile" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
             </div>
           </label>
           <label class="switch-label" id="rebateSwitch">
@@ -122,9 +106,27 @@
             </div>
             <div class="switch-text">
               <span class="switch-text__title" data-i18n="rebate">🎁 CompareFee Exclusive Rebate</span>
-              <span class="switch-text__desc" data-i18n="rebateDesc">Cashback on every trade via referral</span>
+              <span class="switch-text__desc hidden-mobile" data-i18n="rebateDesc">Cashback on every trade via referral</span>
             </div>
           </label>
+        </div>
+
+        <!-- Row 3: Slider + Input (Moved DOWN to touch the chart) -->
+        <div class="controller__row controller__row--slider">
+          <div class="slider-group">
+            <div class="slider-group__header">
+              <label class="slider-group__label" id="sliderLabel" data-i18n="sliderLabelVolume">30-DAY TRADING VOLUME</label>
+              <div class="slider-input-wrap">
+                <span class="slider-input-prefix">$</span>
+                <input type="text" id="valueInput" class="slider-input" value="1,000,000" />
+              </div>
+            </div>
+            <div class="slider-container">
+              <div class="slider-ticks" id="sliderTicks"></div>
+              <input type="range" id="valueSlider" class="slider" min="0" max="1000" value="300" />
+              <div class="slider-track-fill" id="sliderFill"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
