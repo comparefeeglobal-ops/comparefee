@@ -638,7 +638,7 @@ function renderCards(results) {
     card.refs.notice.classList.toggle('result-card__notice--visible', showCoinNotice);
 
     // Maker
-    card.refs.makerBadge.textContent = isMakerLowest ? t('lowest') : '';
+    card.refs.makerBadge.textContent = isMakerLowest ? '👍' : '';
     card.refs.makerBadge.style.display = isMakerLowest ? 'inline-block' : 'none';
     card.refs.makerOrig.textContent = formatFee(preRebateFees.maker);
     card.refs.makerOrig.classList.toggle('fee-item__original--visible', rebateMakerChanged);
@@ -649,7 +649,7 @@ function renderCards(results) {
       (isMakerLowest ? 'fee-item__value--lowest' : '');
 
     // Taker
-    card.refs.takerBadge.textContent = isTakerLowest ? t('lowest') : '';
+    card.refs.takerBadge.textContent = isTakerLowest ? '👍' : '';
     card.refs.takerBadge.style.display = isTakerLowest ? 'inline-block' : 'none';
     card.refs.takerOrig.textContent = formatFee(preRebateFees.taker);
     card.refs.takerOrig.classList.toggle('fee-item__original--visible', rebateTakerChanged);
