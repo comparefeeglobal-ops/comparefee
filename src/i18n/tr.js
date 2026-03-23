@@ -21,8 +21,7 @@ export default {
   lowest: 'En Düşük',
   signUp: 'Kayıt Ol & Payback',
   comingSoon: '🚀 Payback hizmeti yakında başlıyor!',
-  coinPaying: '{coin} ile ödeme',
-  noCoinDiscount: 'Coin indirimi yok',
+  noCoinDiscount: 'Yerel coin indirimi yok',
 
   tooltipMin: 'Minimum',
   tooltipMaker: 'Yapıcı',
