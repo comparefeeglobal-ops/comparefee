@@ -239,6 +239,11 @@ function setupLangSelect() {
   els.langSelect.addEventListener('change', (e) => {
     setLanguage(e.target.value, () => {
       updateSliderLabel();
+      // 언어 변경 시, 번역 텍스트가 DOM에 반영되도록 카드 캐시 초기화
+      if (typeof _cardPool !== 'undefined') {
+        _cardPool.clear();
+      }
+      els.resultsInner.innerHTML = '';
       render();
     });
   });
