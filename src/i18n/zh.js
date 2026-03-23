@@ -20,6 +20,7 @@ export default {
   lowest: '最低',
   signUp: '注册 & 领取 Payback',
   comingSoon: '🚀 Payback 服务即将上线！',
+  coinPaying: '使用{coin}支付',
   noCoinDiscount: '无平台币折扣',
 
   tooltipMin: '最低要求',

@@ -597,7 +597,7 @@ function renderCards(results) {
     const { exchange, matchedTier, fees, hasCoinDiscount } = r;
     const isMakerLowest = fees.maker === lowestMaker;
     const isTakerLowest = fees.taker === lowestTaker;
-    const showCoinNotice = state.coinDiscount && !hasCoinDiscount;
+    const showCoinNotice = state.coinDiscount;
     const preRebateFees = calculateFees(matchedTier, { coinDiscount: state.coinDiscount, rebateRate: 0 });
     const rebateMakerChanged = state.rebateEnabled && fees.maker !== preRebateFees.maker;
     const rebateTakerChanged = state.rebateEnabled && fees.taker !== preRebateFees.taker;
@@ -653,6 +653,9 @@ function renderCards(results) {
     card.el.style.order = orderIndex; // CSS Grid 정렬 속성으로 DOM Move 방지
 
     card.refs.tier.textContent = matchedTier.tier;
+    card.refs.notice.textContent = hasCoinDiscount
+      ? t('coinPaying').replace('{coin}', exchange.nativeCoin)
+      : t('noCoinDiscount');
     card.refs.notice.classList.toggle('result-card__notice--visible', showCoinNotice);
 
     // Maker

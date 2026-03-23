@@ -24,7 +24,8 @@ export default {
   lowest: 'Lowest',
   signUp: 'Sign Up & Get Payback',
   comingSoon: '🚀 Payback service launching soon!',
-  noCoinDiscount: 'No native coin discount available',
+  coinPaying: 'Paying with {coin}',
+  noCoinDiscount: 'No coin discount',
 
   // Tooltip
   tooltipMin: 'Min',

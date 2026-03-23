@@ -20,7 +20,8 @@ export default {
   lowest: '최저',
   signUp: '가입 & 페이백 받기',
   comingSoon: '🚀 페이백 서비스 준비 중입니다!',
-  noCoinDiscount: '네이티브 코인 할인 불가',
+  coinPaying: '{coin}로 지불시',
+  noCoinDiscount: '자체코인 할인 없음',
 
   tooltipMin: '최소',
   tooltipMaker: '메이커',

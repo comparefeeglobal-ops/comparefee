@@ -20,7 +20,8 @@ export default {
   lowest: 'न्यूनतम',
   signUp: 'Sign Up & Payback',
   comingSoon: '🚀 Payback सेवा जल्द आ रही है!',
-  noCoinDiscount: 'नेटिव कॉइन डिस्काउंट उपलब्ध नहीं',
+  coinPaying: '{coin} से भुगतान',
+  noCoinDiscount: 'कॉइन डिस्काउंट नहीं',
 
   tooltipMin: 'न्यूनतम',
   tooltipMaker: 'मेकर',
