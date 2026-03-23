@@ -48,6 +48,13 @@ export function setLanguage(lang, onApply) {
     if (val) el.textContent = val;
   });
 
+  // Update tooltip text for [data-tooltip-i18n] elements
+  document.querySelectorAll('[data-tooltip-i18n]').forEach(el => {
+    const key = el.dataset.tooltipI18n;
+    const val = t(key);
+    if (val) el.dataset.tooltip = val;
+  });
+
   // Update HTML lang attribute
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
 

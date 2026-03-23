@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30 GÜNLÜK İŞLEM HACMİ',
   sliderLabelDeposit: 'TOPLAM DEPOZITO', // Switches
 
-  coinDiscount: 'Komisyonu Borsa Coiniyle Öde',
-  coinDiscountDesc: 'Borsa\'nın native coiniyle komisyon ödeyerek indirim kazan',
+  coinDiscount: 'Coin İndirimi',
+  coinDiscountDesc: 'Bazı borsalar, işlem ücretini kendi native coiniyle ödeyince indirim uygular.',
   rebate: 'CompareFee Payback',
-  rebateDesc: 'Ödediğin komisyonun bir kısmını geri al',
+  rebateDesc: 'Komisyonunun bir kısmını geri alın. (Yakında)',
 
   // Cards
   maker: 'Maker',

@@ -170,24 +170,22 @@
     <div class="switches-section">
       <div class="controller__inner">
         <div class="controller__row controller__row--switches">
-          <label class="switch-label" id="coinDiscountSwitch">
+          <label class="switch-label" id="coinDiscountSwitch" data-tooltip-i18n="coinDiscountDesc">
             <div class="switch">
               <input type="checkbox" id="coinDiscountCheck" />
               <span class="switch__track"><span class="switch__thumb"></span></span>
             </div>
             <div class="switch-text">
-              <span class="switch-text__title" data-i18n="coinDiscount">Exchange Coin Discount</span>
-              <span class="switch-text__desc hidden-mobile" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
+              <span class="switch-text__title" data-i18n="coinDiscount">Coin Discount</span>
             </div>
           </label>
-          <label class="switch-label" id="rebateSwitch" style="display:none">
+          <label class="switch-label switch-label--disabled" id="rebateSwitch" data-tooltip-i18n="rebateDesc">
             <div class="switch">
-              <input type="checkbox" id="rebateCheck" />
+              <input type="checkbox" id="rebateCheck" disabled />
               <span class="switch__track"><span class="switch__thumb"></span></span>
             </div>
             <div class="switch-text">
               <span class="switch-text__title" data-i18n="rebate">CompareFee Payback</span>
-              <span class="switch-text__desc hidden-mobile" data-i18n="rebateDesc">Cashback on every trade via referral</span>
             </div>
           </label>
         </div>

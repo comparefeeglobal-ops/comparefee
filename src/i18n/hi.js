@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30 दिन का ट्रेडिंग वॉल्यूम',
   sliderLabelDeposit: 'कुल जमा',
 
-  coinDiscount: 'एक्सचेंज कॉइन से फीस भुगतान',
-  coinDiscountDesc: 'नेटिव कॉइन से फीस भुगतान पर डिस्काउंट मिलता है',
+  coinDiscount: 'कॉइन डिस्काउंट',
+  coinDiscountDesc: 'कुछ एक्सचेंज नेटिव टोकन से फीस भुगतान पर डिस्काउंट देते हैं।',
   rebate: 'CompareFee Payback',
-  rebateDesc: 'भुगतान की गई फीस का एक हिस्सा वापस पाएं',
+  rebateDesc: 'फीस का एक हिस्सा वापस पाएं। (जल्द आ रहा है)',
 
   maker: 'Maker',
   taker: 'Taker',

@@ -13,10 +13,10 @@ export default {
   sliderLabelDeposit: 'TOTAL DEPOSIT',
 
   // Switches
-  coinDiscount: 'Pay Fees with Exchange Coin',
-  coinDiscountDesc: 'Get discounted fees by paying with the exchange\'s native coin',
+  coinDiscount: 'Coin Discount',
+  coinDiscountDesc: 'Some exchanges offer reduced fees when you pay with their native token.',
   rebate: 'CompareFee Payback',
-  rebateDesc: 'Get a portion of your fees back',
+  rebateDesc: 'Get a portion of your fees back. (Coming soon)',
 
   // Cards
   maker: 'MAKER',

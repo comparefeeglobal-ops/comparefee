@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30일 거래대금',
   sliderLabelDeposit: '총 예치금',
 
-  coinDiscount: '거래소 코인으로 지불',
-  coinDiscountDesc: '거래소 코인으로 수수료 지불시 할인 적용',
+  coinDiscount: '거래소코인으로 지불',
+  coinDiscountDesc: '일부 거래소는 거래소 자체 코인으로 수수료 지불시 수수료가 할인됩니다.',
   rebate: 'CompareFee 페이백',
-  rebateDesc: '수수료 돌려받기',
+  rebateDesc: '수수료 일부를 돌려받을 수 있습니다. (준비 중)',
 
   maker: '메이커',
   taker: '테이커',
