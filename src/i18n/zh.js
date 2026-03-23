@@ -12,7 +12,7 @@ export default {
 
   coinDiscount: '平台币手续费折扣',
   coinDiscountDesc: '使用BNB、BGB、GT、KCS、MX抵扣手续费',
-  rebate: 'CompareFee专属 Payback',
+  rebate: 'CompareFee Payback',
   rebateDesc: '通过推荐链接交易可获返现',
 
   maker: '挂单',

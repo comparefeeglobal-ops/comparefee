@@ -12,7 +12,7 @@ export default {
 
   coinDiscount: 'Borsa Coin İndirimi',
   coinDiscountDesc: 'BNB, BGB, GT, KCS, MX indirimlerini uygula',
-  rebate: 'CompareFee Özel Geri Ödeme (Payback)',
+  rebate: 'CompareFee Payback',
   rebateDesc: 'Referansla her işlemde nakit iade (Cashback)',
 
   // Cards

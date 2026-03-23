@@ -12,7 +12,7 @@ export default {
 
   coinDiscount: 'एक्सचेंज कॉइन डिस्काउंट',
   coinDiscountDesc: 'फीस डिस्काउंट के लिए BNB, BGB, GT, KCS, MX का उपयोग करें',
-  rebate: 'CompareFee एक्सक्लूसिव पेबैक (Payback)',
+  rebate: 'CompareFee Payback',
   rebateDesc: 'रेफरल के माध्यम से हर ट्रेड पर कैशबैक',
 
   maker: 'मेकर (Maker)',
