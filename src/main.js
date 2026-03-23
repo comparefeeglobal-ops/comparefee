@@ -138,6 +138,7 @@ function setupOneSlider(slider, input, fill, stateKey) {
 
   input.addEventListener('input', (e) => {
     const raw = e.target.value.replace(/[^0-9.]/g, '');
+    if (raw.replace('.', '').length > 11) return; // max 11 digits
     const num = parseFloat(raw);
     if (!isNaN(num) && num >= 0) {
       state[stateKey] = num;

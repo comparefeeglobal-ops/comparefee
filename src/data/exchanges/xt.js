@@ -4,7 +4,7 @@
 export default {
   id: "xt",
   name: "XT.com",
-  color: "#17cc97",
+  color: "#72C350",
   nativeCoin: "XT",
   coinDiscountRate: 0.2,
   referralUrl: "https://www.xt.com/accounts/register?ref=FEERADAR",

@@ -268,6 +268,7 @@ body::before {
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .theme-toggle:hover {
@@ -283,12 +284,15 @@ body::before {
   font-family: var(--font);
   font-size: 1rem;
   font-weight: 600;
-  padding: 6px 8px;
+  padding: 0 8px;
+  height: 32px;
+  box-sizing: border-box;
   cursor: pointer;
   outline: none;
   transition: border-color 0.2s ease;
   -webkit-appearance: none;
   appearance: none;
+  flex-shrink: 0;
 }
 
 .lang-select:hover,
@@ -446,12 +450,13 @@ body::before {
 
 .slider-container {
   position: relative;
-  padding: 8px 0 28px;
+  padding: 11px 0 28px; /* 11px = (22px thumb - 6px track) / 2 + 2 for visual balance */
 }
 
 .slider {
   -webkit-appearance: none;
   appearance: none;
+  display: block;
   width: 100%;
   height: 6px;
   background: var(--bg-primary);
@@ -460,19 +465,42 @@ body::before {
   cursor: pointer;
   position: relative;
   z-index: 2;
+  margin: 0;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
+  margin-top: -7px; /* (6px track height - 20px thumb) / 2 = -7px */
   border-radius: 50%;
   background: var(--accent-primary);
   border: 3px solid var(--bg-secondary);
   box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
   cursor: grab;
   transition: transform 0.15s var(--ease-spring), box-shadow 0.15s ease;
+}
+
+.slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-primary);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 3px solid var(--bg-secondary);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
+  cursor: grab;
 }
 
 .slider::-webkit-slider-thumb:active {
@@ -483,7 +511,7 @@ body::before {
 
 .slider-track-fill {
   position: absolute;
-  top: 8px;
+  top: 11px;
   left: 0;
   height: 6px;
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
@@ -527,12 +555,13 @@ body::before {
 .slider-input-wrap {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 6px 12px;
-  max-width: 160px;
+  padding: 5px 10px;
+  max-width: 180px;
+  min-width: 140px;
   transition: border-color 0.2s ease;
 }
 
@@ -544,7 +573,7 @@ body::before {
 .slider-input-prefix {
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
 }
 
 .slider-input {
@@ -553,10 +582,10 @@ body::before {
   outline: none;
   color: var(--text-primary);
   font-family: var(--font);
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 600;
   width: 100%;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   text-align: right;
 }
 
@@ -708,10 +737,20 @@ body::before {
 /* Chart Header */
 .chart-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: var(--space-md);
   position: relative;
   z-index: 50; /* So dropdown floats above chart */
+}
+
+.chart-y-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding-left: 4px;
 }
 
 /* Filter Dropdown */
@@ -756,10 +795,10 @@ body::before {
   top: calc(100% + 8px);
   right: 0;
   width: 260px;
-  background: #111827;
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;

@@ -4,7 +4,7 @@
 export default {
   id: "bitmart",
   name: "Bitmart",
-  color: "#1bb07c",
+  color: "#0BC4CE",
   nativeCoin: "BMX",
   coinDiscountRate: 0.25,
   referralUrl: "https://www.bitmart.com/register-invite/en?r=FEERADAR",

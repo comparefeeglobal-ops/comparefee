@@ -4,7 +4,7 @@
 export default {
   id: "bitunix",
   name: "Bitunix",
-  color: "#1b74ff",
+  color: "#AAEE44",
   nativeCoin: null,
   coinDiscountRate: null,
   referralUrl: "https://www.bitunix.com/register?inviteCode=FEERADAR",

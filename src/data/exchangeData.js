@@ -2,7 +2,7 @@
  * CompareFee - Exchange Fee Data
  *
  * ⚠️  AUTO-GENERATED FILE — Do not edit manually!
- *     Last updated: 2026-03-23T18:24:48.856Z
+ *     Last updated: 2026-03-23T19:10:10.776Z
  *     Run 'node scripts/collect.js' to refresh.
  */
 
@@ -353,7 +353,7 @@ export const exchanges = [
         }
       ]
     },
-    "depositUSDTRate": 637.22
+    "depositUSDTRate": 639.43
   },
   {
     "id": "bybit",
@@ -2160,7 +2160,7 @@ export const exchanges = [
         }
       ]
     },
-    "depositUSDTRate": 8.134
+    "depositUSDTRate": 8.158
   },
   {
     "id": "lbank",
@@ -2679,7 +2679,7 @@ export const exchanges = [
   {
     "id": "bitunix",
     "name": "Bitunix",
-    "color": "#1b74ff",
+    "color": "#AAEE44",
     "nativeCoin": null,
     "coinDiscountRate": null,
     "referralUrl": "https://www.bitunix.com/register?inviteCode=FEERADAR",
@@ -2960,7 +2960,7 @@ export const exchanges = [
   {
     "id": "htx",
     "name": "HTX",
-    "color": "#0155ff",
+    "color": "#7B8FC4",
     "nativeCoin": "HT",
     "coinDiscountRate": 0.25,
     "referralUrl": "https://www.htx.com/en-us/v/register/?invite_code=FEERADAR",
@@ -3337,7 +3337,7 @@ export const exchanges = [
   {
     "id": "bitmart",
     "name": "Bitmart",
-    "color": "#1bb07c",
+    "color": "#0BC4CE",
     "nativeCoin": "BMX",
     "coinDiscountRate": 0.25,
     "referralUrl": "https://www.bitmart.com/register-invite/en?r=FEERADAR",
@@ -3650,7 +3650,7 @@ export const exchanges = [
   {
     "id": "coinw",
     "name": "CoinW",
-    "color": "#ffb400",
+    "color": "#9B5CF5",
     "nativeCoin": "CWT",
     "coinDiscountRate": 0.2,
     "referralUrl": "https://www.coinw.com/front/invitePublicity?r=FEERADAR",
@@ -4212,7 +4212,7 @@ export const exchanges = [
   {
     "id": "xt",
     "name": "XT.com",
-    "color": "#17cc97",
+    "color": "#72C350",
     "nativeCoin": "XT",
     "coinDiscountRate": 0.2,
     "referralUrl": "https://www.xt.com/accounts/register?ref=FEERADAR",

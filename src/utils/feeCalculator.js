@@ -79,10 +79,13 @@ export function formatFee(fee) {
  * Format dollar value for display
  */
 export function formatUSD(value) {
-  if (value >= 1_000_000_000) return '$' + (value / 1_000_000_000).toFixed(1) + 'B';
-  if (value >= 1_000_000) return '$' + (value / 1_000_000).toFixed(1) + 'M';
-  if (value >= 1_000) return '$' + (value / 1_000).toFixed(1) + 'K';
-  return '$' + value.toFixed(0);
+  function fmt(n) {
+    return n % 1 === 0 ? n.toFixed(0) : n.toFixed(1);
+  }
+  if (value >= 1_000_000_000) return '$' + fmt(value / 1_000_000_000) + 'B';
+  if (value >= 1_000_000) return '$' + fmt(value / 1_000_000) + 'M';
+  if (value >= 1_000) return '$' + fmt(value / 1_000) + 'K';
+  return '$' + value.toLocaleString('en-US');
 }
 
 /**

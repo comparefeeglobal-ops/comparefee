@@ -4,7 +4,7 @@
 export default {
   id: "htx",
   name: "HTX",
-  color: "#0155ff", // 브랜드 컬러 (임시)
+  color: "#7B8FC4",
   nativeCoin: "HT",
   coinDiscountRate: 0.25,
   referralUrl: "https://www.htx.com/en-us/v/register/?invite_code=FEERADAR",

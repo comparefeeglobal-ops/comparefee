@@ -4,7 +4,7 @@
 export default {
   id: "coinw",
   name: "CoinW",
-  color: "#ffb400",
+  color: "#9B5CF5",
   nativeCoin: "CWT",
   coinDiscountRate: 0.2,
   referralUrl: "https://www.coinw.com/front/invitePublicity?r=FEERADAR",
