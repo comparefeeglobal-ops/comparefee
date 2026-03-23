@@ -19,6 +19,7 @@ export default {
   taker: '테이커',
   lowest: '최저',
   signUp: '가입 & 페이백 받기',
+  comingSoon: '🚀 페이백 서비스 준비 중입니다!',
   noCoinDiscount: '네이티브 코인 할인 불가',
 
   tooltipMin: '최소',

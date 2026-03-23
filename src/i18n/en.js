@@ -23,6 +23,7 @@ export default {
   taker: 'TAKER',
   lowest: 'Lowest',
   signUp: 'Sign Up & Get Payback',
+  comingSoon: '🚀 Payback service launching soon!',
   noCoinDiscount: 'No native coin discount available',
 
   // Tooltip

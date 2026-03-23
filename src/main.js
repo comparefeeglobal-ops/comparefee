@@ -40,7 +40,7 @@ function loadState() {
       if (parsed.criteria) state.criteria = parsed.criteria;
       if (typeof parsed.userValue === 'number') state.userValue = parsed.userValue;
       if (typeof parsed.coinDiscount === 'boolean') state.coinDiscount = parsed.coinDiscount;
-      if (typeof parsed.rebateEnabled === 'boolean') state.rebateEnabled = parsed.rebateEnabled;
+      // rebateEnabled intentionally excluded — payback service not yet launched
       if (parsed.sortBy) state.sortBy = parsed.sortBy;
       if (parsed.activeExchangeIds && Array.isArray(parsed.activeExchangeIds)) {
         state.activeExchangeIds = parsed.activeExchangeIds;
@@ -266,6 +266,22 @@ function setupSliderTicks() {
 // ============================================
 // Switch Setup
 // ============================================
+// ─── Toast ───────────────────────────────────────────────────
+let _toastTimer = null;
+function showToast(message) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('toast--visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => toast.classList.remove('toast--visible'), 2800);
+}
+
 function setupSwitches() {
   els.coinDiscountCheck.checked = state.coinDiscount;
   els.rebateCheck.checked = state.rebateEnabled;
@@ -612,7 +628,7 @@ function renderCards(results) {
             <span class="fee-item__value ref-taker-val"></span>
           </div>
         </div>
-        <a href="${exchange.referralUrl}" target="_blank" rel="noopener" class="result-card__cta">${t('signUp')}</a>
+        <button type="button" class="result-card__cta ref-cta">${t('signUp')}</button>
       `;
 
       card.refs = {
@@ -623,8 +639,10 @@ function renderCards(results) {
         makerVal: card.el.querySelector('.ref-maker-val'),
         takerBadge: card.el.querySelector('.ref-taker-badge'),
         takerOrig: card.el.querySelector('.ref-taker-orig'),
-        takerVal: card.el.querySelector('.ref-taker-val')
+        takerVal: card.el.querySelector('.ref-taker-val'),
+        cta: card.el.querySelector('.ref-cta'),
       };
+      card.refs.cta.addEventListener('click', () => showToast(t('comingSoon')));
 
       els.resultsInner.appendChild(card.el);
       _cardPool.set(exchange.id, card);

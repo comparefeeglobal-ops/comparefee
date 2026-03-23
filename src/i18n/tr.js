@@ -20,6 +20,7 @@ export default {
   taker: 'Taker',
   lowest: 'En Düşük',
   signUp: 'Kayıt Ol & Payback',
+  comingSoon: '🚀 Payback hizmeti yakında başlıyor!',
   noCoinDiscount: 'Yerel coin indirimi yok',
 
   tooltipMin: 'Minimum',

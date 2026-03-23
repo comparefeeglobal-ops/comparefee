@@ -19,6 +19,7 @@ export default {
   taker: 'Taker',
   lowest: 'न्यूनतम',
   signUp: 'Sign Up & Payback',
+  comingSoon: '🚀 Payback सेवा जल्द आ रही है!',
   noCoinDiscount: 'नेटिव कॉइन डिस्काउंट उपलब्ध नहीं',
 
   tooltipMin: 'न्यूनतम',
