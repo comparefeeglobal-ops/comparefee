@@ -55,11 +55,9 @@ function loadState() {
 const els = {
   marketToggle: document.getElementById('marketToggle'),
   volumeSlider: document.getElementById('volumeSlider'),
-  volumeFill: document.getElementById('volumeFill'),
   volumeTicks: document.getElementById('volumeTicks'),
   volumeInput: document.getElementById('volumeInput'),
   depositSlider: document.getElementById('depositSlider'),
-  depositFill: document.getElementById('depositFill'),
   depositTicks: document.getElementById('depositTicks'),
   depositInput: document.getElementById('depositInput'),
   coinDiscountCheck: document.getElementById('coinDiscountCheck'),
@@ -123,12 +121,16 @@ function updateToggleUI(container, activeValue) {
 // ============================================
 let renderRafId = null;
 
-function setupOneSlider(slider, input, fill, stateKey) {
+function setSliderFill(slider) {
+  slider.style.setProperty('--fill-pct', (slider.value / 1000 * 100) + '%');
+}
+
+function setupOneSlider(slider, input, stateKey) {
   slider.addEventListener('input', () => {
     const position = slider.value / 1000;
     state[stateKey] = sliderToValue(position);
     input.value = Math.round(state[stateKey]).toLocaleString('en-US');
-    fill.style.width = (slider.value / 1000 * 100) + '%';
+    setSliderFill(slider);
 
     if (renderRafId) cancelAnimationFrame(renderRafId);
     renderRafId = requestAnimationFrame(() => render());
@@ -144,7 +146,7 @@ function setupOneSlider(slider, input, fill, stateKey) {
       state[stateKey] = num;
       const pos = valueToSlider(num);
       slider.value = Math.round(pos * 1000);
-      fill.style.width = (slider.value / 1000 * 100) + '%';
+      setSliderFill(slider);
       saveState();
       render();
     }
@@ -157,13 +159,13 @@ function setupOneSlider(slider, input, fill, stateKey) {
   // Initialize position from state
   const pos = valueToSlider(state[stateKey]);
   slider.value = Math.round(pos * 1000);
-  fill.style.width = (slider.value / 1000 * 100) + '%';
+  setSliderFill(slider);
   input.value = Math.round(state[stateKey]).toLocaleString('en-US');
 }
 
 function setupDualSliders() {
-  setupOneSlider(els.volumeSlider, els.volumeInput, els.volumeFill, 'volumeValue');
-  setupOneSlider(els.depositSlider, els.depositInput, els.depositFill, 'depositValue');
+  setupOneSlider(els.volumeSlider, els.volumeInput, 'volumeValue');
+  setupOneSlider(els.depositSlider, els.depositInput, 'depositValue');
 
   window.addEventListener('resize', () => {
     if (renderRafId) cancelAnimationFrame(renderRafId);
@@ -407,12 +409,18 @@ function render() {
     const volResult = findUserTier(volTiers, state.volumeValue);
 
     // Deposit tier matching (convert USDT → native coin if needed)
+    // If depositCurrency exists but rate is unavailable (API fetch failed), skip deposit matching
+    // to avoid using raw USDT value as native coin units (e.g. treating $10,000 as 10,000 BNB).
     let depResult = null;
     if (depTiers && depTiers.length > 0) {
-      const depositEffective = ex.depositUSDTRate
-        ? state.depositValue / ex.depositUSDTRate
-        : state.depositValue;
-      depResult = findUserTier(depTiers, depositEffective);
+      const needsConversion = !!ex.depositCurrency;
+      const rateAvailable = !!ex.depositUSDTRate;
+      if (!needsConversion || rateAvailable) {
+        const depositEffective = rateAvailable
+          ? state.depositValue / ex.depositUSDTRate
+          : state.depositValue;
+        depResult = findUserTier(depTiers, depositEffective);
+      }
     }
 
     // AND/OR tier resolution
