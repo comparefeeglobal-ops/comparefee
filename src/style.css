@@ -453,13 +453,24 @@ body::before {
   padding: 11px 0 28px; /* 11px = (22px thumb - 6px track) / 2 + 2 for visual balance */
 }
 
+/* Volume slider: blue */
+#volumeSlider {
+  --fill-a: #429FE5;
+  --fill-b: #7AC3F5;
+}
+/* Deposit slider: amber */
+#depositSlider {
+  --fill-a: #F59E0B;
+  --fill-b: #FBBF24;
+}
+
 .slider {
   -webkit-appearance: none;
   appearance: none;
   display: block;
   width: 100%;
   height: 6px;
-  background: var(--bg-primary);
+  background: var(--bg-secondary); /* fallback for non-WebKit */
   border-radius: 3px;
   outline: none;
   cursor: pointer;
@@ -468,9 +479,16 @@ body::before {
   margin: 0;
 }
 
+/* WebKit: gradient must live on the track pseudo-element, not the element itself */
 .slider::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
+  background: linear-gradient(to right,
+    var(--fill-a, #429FE5) 0%,
+    var(--fill-b, #7AC3F5) var(--fill-pct, 0%),
+    var(--bg-secondary) var(--fill-pct, 0%),
+    var(--bg-secondary) 100%
+  );
 }
 
 .slider::-webkit-slider-thumb {
@@ -478,38 +496,44 @@ body::before {
   appearance: none;
   width: 20px;
   height: 20px;
-  margin-top: -7px; /* (6px track height - 20px thumb) / 2 = -7px */
+  margin-top: -7px; /* center on 6px track: -(20-6)/2 */
   border-radius: 50%;
-  background: var(--accent-primary);
+  background: var(--fill-a, var(--accent-primary));
   border: 3px solid var(--bg-secondary);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 3px rgba(66,159,229,0.35), 0 2px 8px rgba(0,0,0,0.4);
   cursor: grab;
   transition: transform 0.15s var(--ease-spring), box-shadow 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
 }
 
 .slider::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
+}
+
+.slider::-moz-range-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--fill-a, #429FE5);
 }
 
 .slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--accent-primary);
+  background: var(--fill-a, var(--accent-primary));
   border: 3px solid var(--bg-secondary);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 3px rgba(66,159,229,0.35), 0 2px 8px rgba(0,0,0,0.4);
   cursor: grab;
 }
 
-.slider::-webkit-slider-thumb:active {
-  cursor: grabbing;
-  transform: scale(1.15);
-  box-shadow: 0 0 0 6px var(--accent-glow), 0 2px 12px rgba(0,0,0,0.5);
-}
-
 .slider-track-fill {
+  display: none; /* gradient handled directly on slider element */
   position: absolute;
   top: 11px;
   left: 0;
