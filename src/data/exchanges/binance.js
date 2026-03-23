@@ -9,6 +9,7 @@ export default {
   color: "#F0B90B",
   nativeCoin: "BNB",
   coinDiscountRate: 0.1,
+  depositCurrency: 'BNB',   // depositBased min values are in BNB units
   referralUrl: "https://accounts.binance.com/register?ref=FEERADAR",
   rebate: { spot: 0.2, futures: 0.2 },
   active: true,

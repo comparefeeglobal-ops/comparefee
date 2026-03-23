@@ -9,6 +9,7 @@ export default {
   color: "#23AF91",
   nativeCoin: "KCS",
   coinDiscountRate: 0.2,
+  depositCurrency: 'KCS',   // depositBased min values are in KCS units
   referralUrl: "https://www.kucoin.com/r/FEERADAR",
   rebate: { spot: 0.2, futures: 0.2 },
   active: true,

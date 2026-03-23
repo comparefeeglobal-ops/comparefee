@@ -1,9 +1,9 @@
 name: Daily Fee Data Update
 
 on:
-  # Run every day at 2:00 AM UTC (11:00 AM KST)
+  # Run every 2 hours
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 */2 * * *'
 
   # Allow manual trigger from GitHub Actions tab
   workflow_dispatch:
@@ -49,5 +49,5 @@ jobs:
           git config user.name  "FeeRadar Bot"
           git config user.email "bot@feeradar.io"
           git add src/data/exchangeData.js
-          git commit -m "chore: auto-update fee data [$(date -u '+%Y-%m-%d')]"
+          git commit -m "chore: auto-update fee data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push

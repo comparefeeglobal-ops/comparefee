@@ -75,6 +75,38 @@ function validateExchange(data) {
 }
 
 // ============================================================
+// Deposit Currency Price Fetcher
+// ============================================================
+
+async function fetchDepositCurrencyPrices(exchanges) {
+  const currencies = [...new Set(exchanges.map(ex => ex.depositCurrency).filter(Boolean))];
+  if (currencies.length === 0) return {};
+
+  const prices = {};
+
+  await Promise.all(currencies.map(async (currency) => {
+    try {
+      if (currency === 'BNB') {
+        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+        const data = await res.json();
+        prices['BNB'] = parseFloat(data.price);
+        console.log(`💱 BNB/USDT: $${prices['BNB']}`);
+      } else if (currency === 'KCS') {
+        const res = await fetch('https://api.kucoin.com/api/v1/market/orderbook/level1?symbol=KCS-USDT');
+        const data = await res.json();
+        prices['KCS'] = parseFloat(data.data.price);
+        console.log(`💱 KCS/USDT: $${prices['KCS']}`);
+      }
+    } catch (e) {
+      console.warn(`⚠️  Failed to fetch ${currency}/USDT price: ${e.message}`);
+      prices[currency] = null;
+    }
+  }));
+
+  return prices;
+}
+
+// ============================================================
 // Code Generator
 // ============================================================
 
@@ -98,7 +130,7 @@ export const exchanges = ${json};
 // Main
 // ============================================================
 
-function main() {
+async function main() {
   console.log('🚀 CompareFee fee data compiler started');
   console.log(`📅 ${new Date().toISOString()}\n`);
 
@@ -133,10 +165,23 @@ function main() {
     console.warn('⚠️  Some exchanges failed validation and were excluded.');
   }
 
-  const fileContent = generateDataFile(valid);
+  // Fetch deposit currency prices (BNB, KCS) for exchanges with native coin deposit tiers
+  const prices = await fetchDepositCurrencyPrices(valid);
+
+  // Attach depositUSDTRate to each exchange that needs it
+  const enriched = valid.map(ex => {
+    if (!ex.depositCurrency) return ex;
+    const rate = prices[ex.depositCurrency] ?? null;
+    if (rate === null) {
+      console.warn(`⚠️  ${ex.name}: depositUSDTRate set to null (fetch failed) — deposit tier matching will be disabled`);
+    }
+    return { ...ex, depositUSDTRate: rate };
+  });
+
+  const fileContent = generateDataFile(enriched);
   writeFileSync(OUTPUT_PATH, fileContent, 'utf8');
 
-  console.log(`✅ exchangeData.js updated with ${valid.length} exchanges`);
+  console.log(`\n✅ exchangeData.js updated with ${enriched.length} exchanges`);
   console.log(`📁 ${OUTPUT_PATH}`);
 }
 

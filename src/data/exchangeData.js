@@ -2,7 +2,7 @@
  * CompareFee - Exchange Fee Data
  *
  * ⚠️  AUTO-GENERATED FILE — Do not edit manually!
- *     Last updated: 2026-03-23T17:22:43.679Z
+ *     Last updated: 2026-03-23T17:41:08.731Z
  *     Run 'node scripts/collect.js' to refresh.
  */
 
@@ -13,6 +13,7 @@ export const exchanges = [
     "color": "#F0B90B",
     "nativeCoin": "BNB",
     "coinDiscountRate": 0.1,
+    "depositCurrency": "BNB",
     "referralUrl": "https://accounts.binance.com/register?ref=FEERADAR",
     "rebate": {
       "spot": 0.2,
@@ -350,7 +351,8 @@ export const exchanges = [
           "coinTaker": 0.0153
         }
       ]
-    }
+    },
+    "depositUSDTRate": 636.66
   },
   {
     "id": "bybit",
@@ -1722,6 +1724,7 @@ export const exchanges = [
     "color": "#23AF91",
     "nativeCoin": "KCS",
     "coinDiscountRate": 0.2,
+    "depositCurrency": "KCS",
     "referralUrl": "https://www.kucoin.com/r/FEERADAR",
     "rebate": {
       "spot": 0.2,
@@ -2155,7 +2158,8 @@ export const exchanges = [
           "coinTaker": 0.025
         }
       ]
-    }
+    },
+    "depositUSDTRate": 8.111
   },
   {
     "id": "lbank",

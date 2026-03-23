@@ -440,7 +440,13 @@ function render() {
       return { exchange: ex, disabled: true, tiers: [], matchedTier: null, fees: null };
     }
 
-    const { tierIndex, tier } = findUserTier(tierData, state.userValue);
+    // depositBased tiers for Binance/KuCoin are in native coin units (BNB/KCS).
+    // Convert user's USDT value to native coin units before tier matching.
+    const effectiveValue = (state.criteria === 'deposit' && ex.depositUSDTRate)
+      ? state.userValue / ex.depositUSDTRate
+      : state.userValue;
+
+    const { tierIndex, tier } = findUserTier(tierData, effectiveValue);
     
     const rebateRate = state.rebateEnabled ? ex.rebate[state.market] : 0;
     const fees = calculateFees(tier, {
