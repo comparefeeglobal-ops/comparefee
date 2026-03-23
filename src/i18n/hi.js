@@ -10,15 +10,15 @@ export default {
   sliderLabelVolume: '30 दिन का ट्रेडिंग वॉल्यूम',
   sliderLabelDeposit: 'कुल जमा',
 
-  coinDiscount: 'एक्सचेंज कॉइन डिस्काउंट',
+  coinDiscount: 'कॉइन डिस्काउंट',
   coinDiscountDesc: 'फीस डिस्काउंट के लिए BNB, BGB, GT, KCS, MX का उपयोग करें',
   rebate: 'CompareFee Payback',
   rebateDesc: 'रेफरल के माध्यम से हर ट्रेड पर कैशबैक',
 
-  maker: 'मेकर (Maker)',
-  taker: 'टेकर (Taker)',
+  maker: 'Maker',
+  taker: 'Taker',
   lowest: 'न्यूनतम',
-  signUp: 'साइन अप करें और पेबैक पाएं →',
+  signUp: 'Sign Up & Payback',
   noCoinDiscount: 'नेटिव कॉइन डिस्काउंट उपलब्ध नहीं',
 
   tooltipMin: 'न्यूनतम',

@@ -13,7 +13,7 @@ export default {
   sliderLabelDeposit: 'TOTAL DEPOSIT',
 
   // Switches
-  coinDiscount: 'Exchange Coin Discount',
+  coinDiscount: 'Coin Discount',
   coinDiscountDesc: 'Apply BNB, BGB, GT, KCS, MX fee discount',
   rebate: 'CompareFee Payback',
   rebateDesc: 'Cashback on every trade via referral',
@@ -22,7 +22,7 @@ export default {
   maker: 'MAKER',
   taker: 'TAKER',
   lowest: 'Lowest',
-  signUp: 'Sign Up & Get Payback →',
+  signUp: 'Sign Up & Get Payback',
   noCoinDiscount: 'No native coin discount available',
 
   // Tooltip

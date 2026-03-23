@@ -18,7 +18,7 @@ export default {
   maker: '메이커',
   taker: '테이커',
   lowest: '최저',
-  signUp: '가입하고 페이백 받기 →',
+  signUp: '가입 & 페이백 받기',
   noCoinDiscount: '네이티브 코인 할인 불가',
 
   tooltipMin: '최소',

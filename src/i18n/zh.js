@@ -18,7 +18,7 @@ export default {
   maker: '挂单',
   taker: '吃单',
   lowest: '最低',
-  signUp: '注册领取 Payback →',
+  signUp: '注册 & 领取 Payback',
   noCoinDiscount: '无平台币折扣',
 
   tooltipMin: '最低要求',

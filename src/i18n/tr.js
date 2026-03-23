@@ -16,10 +16,10 @@ export default {
   rebateDesc: 'Referansla her işlemde nakit iade (Cashback)',
 
   // Cards
-  maker: 'PİYASA YAPICI (Maker)',
-  taker: 'PİYASA ALICI (Taker)',
+  maker: 'Maker',
+  taker: 'Taker',
   lowest: 'En Düşük',
-  signUp: 'Kayıt Ol ve Payback Kazan →',
+  signUp: 'Kayıt Ol & Payback',
   noCoinDiscount: 'Yerel coin indirimi yok',
 
   tooltipMin: 'Minimum',
