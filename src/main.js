@@ -594,10 +594,9 @@ function renderCards(results) {
   });
 
   sorted.forEach((r, orderIndex) => {
-    const { exchange, matchedTier, fees, hasCoinDiscount } = r;
+    const { exchange, matchedTier, fees } = r;
     const isMakerLowest = fees.maker === lowestMaker;
     const isTakerLowest = fees.taker === lowestTaker;
-    const showCoinNotice = state.coinDiscount && !hasCoinDiscount;
     const preRebateFees = calculateFees(matchedTier, { coinDiscount: state.coinDiscount, rebateRate: 0 });
     const rebateMakerChanged = state.rebateEnabled && fees.maker !== preRebateFees.maker;
     const rebateTakerChanged = state.rebateEnabled && fees.taker !== preRebateFees.taker;
@@ -615,7 +614,6 @@ function renderCards(results) {
           <span class="result-card__exchange" data-exchange="${exchange.id}" style="color:${exchange.color}">${exchange.name}</span>
           <span class="result-card__tier ref-tier"></span>
         </div>
-        <div class="result-card__notice ref-notice">${t('noCoinDiscount')}</div>
         <div class="result-card__fees">
           <div class="fee-item">
             <span class="fee-item__label">${t('maker')} <span class="fee-badge ref-maker-badge"></span></span>
@@ -633,7 +631,6 @@ function renderCards(results) {
 
       card.refs = {
         tier: card.el.querySelector('.ref-tier'),
-        notice: card.el.querySelector('.ref-notice'),
         makerBadge: card.el.querySelector('.ref-maker-badge'),
         makerOrig: card.el.querySelector('.ref-maker-orig'),
         makerVal: card.el.querySelector('.ref-maker-val'),
@@ -653,7 +650,6 @@ function renderCards(results) {
     card.el.style.order = orderIndex; // CSS Grid 정렬 속성으로 DOM Move 방지
 
     card.refs.tier.textContent = matchedTier.tier;
-    card.refs.notice.classList.toggle('result-card__notice--visible', showCoinNotice);
 
     // Maker
     card.refs.makerBadge.textContent = isMakerLowest ? '👍' : '';
