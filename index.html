@@ -87,30 +87,6 @@
           </div>
         </div>
 
-        <!-- Row 2: Option switches (Moved UP for Mobile UX) -->
-        <div class="controller__row controller__row--switches">
-          <label class="switch-label" id="coinDiscountSwitch">
-            <div class="switch">
-              <input type="checkbox" id="coinDiscountCheck" />
-              <span class="switch__track"><span class="switch__thumb"></span></span>
-            </div>
-            <div class="switch-text">
-              <span class="switch-text__title" data-i18n="coinDiscount">Exchange Coin Discount</span>
-              <span class="switch-text__desc hidden-mobile" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
-            </div>
-          </label>
-          <label class="switch-label" id="rebateSwitch">
-            <div class="switch">
-              <input type="checkbox" id="rebateCheck" />
-              <span class="switch__track"><span class="switch__thumb"></span></span>
-            </div>
-            <div class="switch-text">
-              <span class="switch-text__title" data-i18n="rebate">CompareFee Payback</span>
-              <span class="switch-text__desc hidden-mobile" data-i18n="rebateDesc">Cashback on every trade via referral</span>
-            </div>
-          </label>
-        </div>
-
         <!-- Row 3: Slider + Input (Moved DOWN to touch the chart) -->
         <div class="controller__row controller__row--slider">
           <div class="slider-group">
@@ -188,6 +164,34 @@
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       -->
       <span class="ad-slot__placeholder">AD</span>
+    </div>
+
+    <!-- Option Switches (between chart and result cards) -->
+    <div class="switches-section">
+      <div class="controller__inner">
+        <div class="controller__row controller__row--switches">
+          <label class="switch-label" id="coinDiscountSwitch">
+            <div class="switch">
+              <input type="checkbox" id="coinDiscountCheck" />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+            </div>
+            <div class="switch-text">
+              <span class="switch-text__title" data-i18n="coinDiscount">Exchange Coin Discount</span>
+              <span class="switch-text__desc hidden-mobile" data-i18n="coinDiscountDesc">Apply BNB, BGB, GT, KCS, MX fee discount</span>
+            </div>
+          </label>
+          <label class="switch-label" id="rebateSwitch">
+            <div class="switch">
+              <input type="checkbox" id="rebateCheck" />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+            </div>
+            <div class="switch-text">
+              <span class="switch-text__title" data-i18n="rebate">CompareFee Payback</span>
+              <span class="switch-text__desc hidden-mobile" data-i18n="rebateDesc">Cashback on every trade via referral</span>
+            </div>
+          </label>
+        </div>
+      </div>
     </div>
 
     <!-- Result Cards -->

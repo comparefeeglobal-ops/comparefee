@@ -1051,6 +1051,14 @@ body.theme-light [data-exchange="okx"] {
 }
 
 /* ============================================
+   Switches Section (between chart and result cards)
+   ============================================ */
+
+.switches-section {
+  margin-bottom: var(--space-lg);
+}
+
+/* ============================================
    Result Cards
    ============================================ */
 
