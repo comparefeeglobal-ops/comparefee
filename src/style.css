@@ -1255,13 +1255,7 @@ body.theme-light [data-exchange="okx"] {
 }
 
 .fee-item__value--lowest {
-  background: var(--green);
-  color: #000 !important;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  display: inline-block;
-  align-self: flex-start;
-  width: fit-content;
+  color: var(--green) !important;
 }
 
 /* CTA Button */
