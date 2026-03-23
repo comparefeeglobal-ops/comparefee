@@ -232,7 +232,7 @@ body::before {
    ============================================ */
 
 .header {
-  padding: var(--space-2xl) 0 var(--space-lg);
+  padding: var(--space-2xl) 0 var(--space-sm);
   text-align: center;
 }
 
@@ -281,18 +281,14 @@ body::before {
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font);
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 6px 10px;
+  padding: 6px 8px;
   cursor: pointer;
   outline: none;
   transition: border-color 0.2s ease;
   -webkit-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  padding-right: 24px;
 }
 
 .lang-select:hover,
@@ -335,6 +331,7 @@ body::before {
   color: var(--text-secondary);
   font-size: 0.95rem;
   font-weight: 400;
+  margin-top: var(--space-md);
 }
 
 @keyframes pulse-glow {
@@ -1372,7 +1369,7 @@ body.theme-light [data-exchange="okx"] {
   }
 
   .header {
-    padding: var(--space-lg) 0 var(--space-md);
+    padding: var(--space-lg) 0 var(--space-xs);
   }
 
   .header__top {
