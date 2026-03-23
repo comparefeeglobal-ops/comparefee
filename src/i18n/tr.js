@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30 GÜNLÜK İŞLEM HACMİ',
   sliderLabelDeposit: 'TOPLAM DEPOZITO', // Switches
 
-  coinDiscount: 'Borsa Coin İndirimi',
-  coinDiscountDesc: 'BNB, BGB, GT, KCS, MX indirimlerini uygula',
+  coinDiscount: 'Komisyonu Borsa Coiniyle Öde',
+  coinDiscountDesc: 'Borsa\'nın native coiniyle komisyon ödeyerek indirim kazan',
   rebate: 'CompareFee Payback',
-  rebateDesc: 'Referansla her işlemde nakit iade (Cashback)',
+  rebateDesc: 'Ödediğin komisyonun bir kısmını geri al',
 
   // Cards
   maker: 'Maker',

@@ -13,10 +13,10 @@ export default {
   sliderLabelDeposit: 'TOTAL DEPOSIT',
 
   // Switches
-  coinDiscount: 'Coin Discount',
-  coinDiscountDesc: 'Apply BNB, BGB, GT, KCS, MX fee discount',
+  coinDiscount: 'Pay Fees with Exchange Coin',
+  coinDiscountDesc: 'Get discounted fees by paying with the exchange\'s native coin',
   rebate: 'CompareFee Payback',
-  rebateDesc: 'Cashback on every trade via referral',
+  rebateDesc: 'Get a portion of your fees back',
 
   // Cards
   maker: 'MAKER',

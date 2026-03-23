@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30日交易额',
   sliderLabelDeposit: '总存款',
 
-  coinDiscount: '平台币手续费折扣',
-  coinDiscountDesc: '使用BNB、BGB、GT、KCS、MX抵扣手续费',
+  coinDiscount: '用平台币支付手续费',
+  coinDiscountDesc: '使用交易所原生代币支付手续费可享受折扣',
   rebate: 'CompareFee Payback',
-  rebateDesc: '通过推荐链接交易可获返现',
+  rebateDesc: '返还部分手续费',
 
   maker: '挂单',
   taker: '吃单',

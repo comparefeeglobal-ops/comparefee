@@ -10,10 +10,10 @@ export default {
   sliderLabelVolume: '30일 거래대금',
   sliderLabelDeposit: '총 예치금',
 
-  coinDiscount: '거래소 코인 할인',
-  coinDiscountDesc: 'BNB, BGB, GT, KCS, MX 수수료 할인 적용',
+  coinDiscount: '거래소 코인으로 지불',
+  coinDiscountDesc: '거래소 코인으로 수수료 지불시 할인 적용',
   rebate: 'CompareFee 페이백',
-  rebateDesc: '레퍼럴을 통한 매 거래 캐시백',
+  rebateDesc: '수수료 돌려받기',
 
   maker: '메이커',
   taker: '테이커',
