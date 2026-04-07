@@ -2,7 +2,7 @@
  * CompareFee - Exchange Fee Data
  *
  * ⚠️  AUTO-GENERATED FILE — Do not edit manually!
- *     Last updated: 2026-04-07T16:16:16.011Z
+ *     Last updated: 2026-04-07T20:05:53.855Z
  *     Run 'node scripts/collect.js' to refresh.
  */
 
@@ -2160,7 +2160,7 @@ export const exchanges = [
         }
       ]
     },
-    "depositUSDTRate": 8.116
+    "depositUSDTRate": 8.242
   },
   {
     "id": "lbank",
