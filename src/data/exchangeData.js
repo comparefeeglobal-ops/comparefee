@@ -2,7 +2,7 @@
  * CompareFee - Exchange Fee Data
  *
  * ⚠️  AUTO-GENERATED FILE — Do not edit manually!
- *     Last updated: 2026-09-12T16:50:39.790Z
+ *     Last updated: 2026-09-12T20:20:40.574Z
  *     Run 'node scripts/collect.js' to refresh.
  */
 
